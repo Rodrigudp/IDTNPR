@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IDTNPR - Instituto de Desenvolvimento de Tecnologias do Noroeste Paranaense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+    integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="nav">
+      <div class="logo">
+        <img src="logo.png" alt="IDTNPR">
+      </div>
+
+      <nav>
+        <a href="index.html">Sobre o Instituto</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#conhecimento">Conhecimento</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <a href="#" class="btn-primary">Fale conosco</a>
+    </div>
+  </header>
+  <section class="inicio">
+    <div class="container protocolo-grid">
+      <div class="protocolo-text">
+        <h2>
+          Protocolo Digital
+        </h2>
+        <p>
+          Solução completa para a gestão eletrônica de documentos e processos, que garante agilidade, segurança,
+          rastreabilidade e conformidade coma legislação.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="section-solicitacao">
+    <div class="container solicitacao-grid">
+      <div class="card-solicitar">
+        <h6 style="padding-bottom: 20px; font-weight: 700;"> Abrir Nova Solicitação </h6>
+        <div class="row">
+          <div class="col" style="  display: flex; flex-direction: column;">
+            <label class="label-solicitacao">Nome Completo</label>
+            <input class="input-solicitacao" name="nome" type="text" placeholder="Digite seu nome completo" />
+          </div>
+          <div class="col" style="  display: flex; flex-direction: column;">
+            <label class="label-solicitacao">Cpf</label>
+            <input class="input-solicitacao" name="cpf" id="cpf" type="text" placeholder="Digite seu Cpf" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col" style="display: flex; flex-direction: column;">
+            <label class="label-solicitacao">Email</label>
+            <input class="input-solicitacao" name="email" id="email" type="email" placeholder="Digite seu Email" />
+          </div>
+          <div class="col" style="  display: flex; flex-direction: column;">
+            <label class="label-solicitacao">Telefone</label>
+            <input class="input-solicitacao" name="telefone" id="telefone" type="text" placeholder="(00) 00000-0000" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col" style="display: flex; flex-direction: column;">
+             <label class="label-solicitacao">Tipo de Solicitação</label>
+            <select class="select-solicitacao" name="tipo-solicitacao" id="tipo-solicitacao">
+              <option value="" disabled selected>Selecione uma opção</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+      </div>
+      <div class="row">
+        <div class="col" style="display: flex; flex-direction: column;">
+          <label class="label-solicitacao">Descrição da Solicitação</label>
+          <textarea class="input-descricao" name="descricao" id="descricao" placeholder="Descreva sua solicitação com o máximo de detalhes possíveis"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col" style="display: flex; flex-direction: column;">
+          <label class="label-solicitacao">Anexos</label>
+           <input class="input-solicitacao" type="text" placeholder="Anexar arquivos" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+
+</html>
