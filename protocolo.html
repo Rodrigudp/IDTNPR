@@ -1,102 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IDTNPR - Instituto de Desenvolvimento de Tecnologias do Noroeste Paranaense</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Protocolo Digital - IDTNPR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
-    integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
-    crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="protocolo.css"/>
 </head>
-
 <body>
-  <header class="header">
-    <div class="nav">
-      <div class="logo">
-        <img src="logo.png" alt="IDTNPR">
-      </div>
 
-      <nav>
-        <a href="index.html">Sobre o Instituto</a>
-        <a href="#projetos">Projetos</a>
-        <a href="#solucoes">Soluções</a>
-        <a href="#conhecimento">Conhecimento</a>
-        <a href="#contato">Contato</a>
-      </nav>
 
-      <a href="#" class="btn-primary">Fale conosco</a>
+<header class="header">
+  <div class="nav">
+    <div class="logo">
+      <img src="logo.png" alt="IDTNPR">
     </div>
-  </header>
-  <section class="inicio">
-    <div class="container protocolo-grid">
-      <div class="protocolo-text">
-        <h2>
-          Protocolo Digital
-        </h2>
-        <p>
-          Solução completa para a gestão eletrônica de documentos e processos, que garante agilidade, segurança,
-          rastreabilidade e conformidade coma legislação.
-        </p>
-      </div>
-    </div>
-  </section>
-  <section class="section-solicitacao">
-    <div class="container solicitacao-grid">
-      <div class="card-solicitar">
-        <h6 style="padding-bottom: 20px; font-weight: 700;"> Abrir Nova Solicitação </h6>
-        <div class="row">
-          <div class="col" style="  display: flex; flex-direction: column;">
-            <label class="label-solicitacao">Nome Completo</label>
-            <input class="input-solicitacao" name="nome" type="text" placeholder="Digite seu nome completo" />
+    <nav>
+      <a href="#sobre">Sobre o Instituto</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#solucoes">Soluções</a>
+      <a href="#conhecimento">Conhecimento</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a href="#" class="btn-primary">Fale conosco</a>
+  </div>
+</header>
+
+
+<div class="breadcrumb-bar">
+  <div class="container">
+    <nav class="breadcrumb-nav">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <a href="#">Soluções</a>
+      <span class="sep">/</span>
+      <span class="current">Protocolo Digital</span>
+    </nav>
+  </div>
+</div>
+
+
+<section class="protocolo-section">
+  <div class="page-wrapper">
+
+    <div class="left-col">
+
+
+      <h1 class="page-title">Protocolo Digital</h1>
+      <p class="protocolo-desc">
+        Solução completa para a gestão eletrônica de documentos e processos, que garante agilidade, segurança, rastreabilidade e conformidade com a legislação.
+      </p>
+
+      <div class="form-card">
+        <h2>Abrir nova solicitação</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome completo</label>
+            <input type="text" placeholder="Digite seu nome completo" />
           </div>
-          <div class="col" style="  display: flex; flex-direction: column;">
-            <label class="label-solicitacao">Cpf</label>
-            <input class="input-solicitacao" name="cpf" id="cpf" type="text" placeholder="Digite seu Cpf" />
+          <div class="form-group">
+            <label>CPF</label>
+            <input type="text" placeholder="Digite seu CPF" />
           </div>
         </div>
-        <div class="row">
-          <div class="col" style="display: flex; flex-direction: column;">
-            <label class="label-solicitacao">Email</label>
-            <input class="input-solicitacao" name="email" id="email" type="email" placeholder="Digite seu Email" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" placeholder="Digite seu e-mail" />
           </div>
-          <div class="col" style="  display: flex; flex-direction: column;">
-            <label class="label-solicitacao">Telefone</label>
-            <input class="input-solicitacao" name="telefone" id="telefone" type="text" placeholder="(00) 00000-0000" />
+          <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" placeholder="(00) 00000-0000" />
           </div>
         </div>
-        <div class="row">
-          <div class="col" style="display: flex; flex-direction: column;">
-             <label class="label-solicitacao">Tipo de Solicitação</label>
-            <select class="select-solicitacao" name="tipo-solicitacao" id="tipo-solicitacao">
+
+        <div class="form-row single">
+          <div class="form-group">
+            <label>Tipo de solicitação</label>
+            <select>
               <option value="" disabled selected>Selecione uma opção</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
+              <option value="4">4</option>
             </select>
           </div>
+        </div>
 
-      </div>
-      <div class="row">
-        <div class="col" style="display: flex; flex-direction: column;">
-          <label class="label-solicitacao">Descrição da Solicitação</label>
-          <textarea class="input-descricao" name="descricao" id="descricao" placeholder="Descreva sua solicitação com o máximo de detalhes possíveis"></textarea>
+        <div class="form-row single">
+          <div class="form-group">
+            <label>Descrição da solicitação</label>
+            <textarea placeholder="Descreva sua solicitação com o máximo de detalhes possíveis..."></textarea>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col" style="display: flex; flex-direction: column;">
-          <label class="label-solicitacao">Anexos</label>
-           <input class="input-solicitacao" type="text" placeholder="Anexar arquivos" />
+
+        <div class="form-row single">
+          <div class="form-group">
+            <label>Anexos (opcional)</label>
+            <div class="dropzone" onclick="document.getElementById('file-input').click()">
+              <div class="dropzone-icon">↑</div>
+              <p>Arraste e solte arquivos aqui ou clique para selecionar</p>
+              <p class="hint">Formatos aceitos: PDF, JPG, PNG, PNG. Tamanho máximo: 10MB</p>
+              <input id="file-input" type="file" multiple accept=".pdf,.jpg,.png" style="display:none">
+            </div>
+          </div>
         </div>
+
+        <button class="btn-submit">Enviar solicitação</button>
       </div>
     </div>
-  </section>
+
+  
+    <div class="right-col">
+      <div class="protocolo-image">
+        <img src="#" alt="Protocolo Digital">
+      </div>
+
+      <div class="info-card">
+        <h3>Acompanhe sua solicitação</h3>
+        <p>Após o envio, você receberá um número de protocolo para acompanhar o andamento.</p>
+        <a href="#" class="btn-outline-blue">Acompanhar solicitação</a>
+      </div>
+
+      <div class="help-card">
+        <h3>Precisa de ajuda?</h3>
+        <p class="subtitle">Nossa equipe está pronta para te ajudar.</p>
+
+        <div class="contact-item">
+          <div class="icon">
+            <img width="17" height="17" src="https://img.icons8.com/ios-glyphs/30/phone--v1.png" alt="phone--v1"/>
+          </div>
+          <span>(41) 1234-5678</span>
+        </div>
+        <div class="contact-item">
+          <div class="icon">
+            <img width="20" height="20" src="https://img.icons8.com/material/24/mail.png" alt="mail"/>
+          </div>
+          <span>atendimento@cidadaniadigital.org.br</span>
+        </div>
+
+        <a href="#" class="faq-link">Perguntas frequentes →</a>
+      </div>
+
+      <div class="lgpd-notice">
+        <div class="lgpd-icon">
+          <img width="20" height="20" src="https://img.icons8.com/material-outlined/24/lock--v1.png" alt="lock--v1"/>
+        </div>
+        <div class="lgpd-text">
+          <h4>Seus dados estão protegidos</h4>
+          <p>Todas as informações são tratadas com segurança e em conformidade com a Lei Geral de Proteção de Dados (LGPD).</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container footer-grid">
+
+    <div>
+      <div class="footer-logo">
+        <img src="logo.png" alt="IDTNPR">
+      </div>
+      <p>
+        Conectamos pessoas, tecnologia e governo para construir soluções
+        com impacto social.
+      </p>
+    </div>
+
+    <div>
+      <h4>NAVEGAÇÃO</h4>
+      <a href="#">Sobre o Instituto</a>
+      <a href="#">Projetos</a>
+      <a href="#">Soluções</a>
+      <a href="#">Contato</a>
+    </div>
+
+    <div>
+      <h4>INSTITUCIONAL</h4>
+      <a href="#">Equipe</a>
+      <a href="#">Governança</a>
+      <a href="#">Transparência</a>
+      <a href="#">Trabalhe conosco</a>
+    </div>
+
+    <div>
+      <h4>CONTATO</h4>
+      <p id="footer-email">contato@idtnpr.org.br</p>
+      <p id="footer-phone">(44) 99999-9999</p>
+    </div>
+
+  </div>
+</footer>
+
 
 </body>
-
 </html>
