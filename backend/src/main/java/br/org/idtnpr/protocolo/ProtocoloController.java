@@ -1,7 +1,7 @@
 package br.org.idtnpr.protocolo;
 
 import br.org.idtnpr.protocolo.dto.CriarProtocoloRequest;
-import br.org.idtnpr.protocolo.dto.ProtocoloResponse;
+import br.org.idtnpr.protocolo.dto.ProtocoloPublicoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,25 +33,25 @@ public class ProtocoloController {
 
     @PostMapping
     @Operation(summary = "Abre uma nova solicitação e retorna o número de protocolo")
-    public ResponseEntity<ProtocoloResponse> abrir(@Valid @RequestBody CriarProtocoloRequest request,
-                                                   UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ProtocoloPublicoResponse> abrir(@Valid @RequestBody CriarProtocoloRequest request,
+                                                          UriComponentsBuilder uriBuilder) {
         Protocolo protocolo = protocoloService.abrir(request);
         URI location = uriBuilder.path("/api/protocolos/{numero}")
                 .buildAndExpand(protocolo.getNumero()).toUri();
-        return ResponseEntity.created(location).body(ProtocoloResponse.de(protocolo));
+        return ResponseEntity.created(location).body(ProtocoloPublicoResponse.de(protocolo));
     }
 
     @GetMapping("/{numero}")
     @Operation(summary = "Consulta uma solicitação pelo número de protocolo")
-    public ResponseEntity<ProtocoloResponse> acompanhar(@PathVariable String numero) {
-        return ResponseEntity.ok(ProtocoloResponse.de(protocoloService.buscarPorNumero(numero)));
+    public ResponseEntity<ProtocoloPublicoResponse> acompanhar(@PathVariable String numero) {
+        return ResponseEntity.ok(ProtocoloPublicoResponse.de(protocoloService.buscarPorNumero(numero)));
     }
 
     @PostMapping("/{numero}/anexos")
     @Operation(summary = "Anexa um arquivo a uma solicitação existente")
-    public ResponseEntity<ProtocoloResponse> anexar(@PathVariable String numero,
-                                                    @RequestParam("arquivo") org.springframework.web.multipart.MultipartFile arquivo) {
+    public ResponseEntity<ProtocoloPublicoResponse> anexar(@PathVariable String numero,
+                                                           @RequestParam("arquivo") org.springframework.web.multipart.MultipartFile arquivo) {
         Protocolo protocolo = protocoloService.anexar(numero, arquivo);
-        return ResponseEntity.ok(ProtocoloResponse.de(protocolo));
+        return ResponseEntity.ok(ProtocoloPublicoResponse.de(protocolo));
     }
 }

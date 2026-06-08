@@ -17,13 +17,17 @@ conteúdo do site, contato e upload de arquivos. As tarefas abaixo evoluem essa 
 
 ## 1. Segurança e autenticação
 
+- [x] 🔴 ~~Defaults fracos de senha (DB/admin) no config~~ — removidos; em produção `DB_PASSWORD`/`ADMIN_SENHA` são obrigatórios (a app falha ao subir sem eles).
+- [x] 🟡 ~~Swagger/api-docs exposto em produção~~ — desativado no perfil `prod`.
+- [x] 🟡 ~~Upload de admin aceitava qualquer tipo (risco de XSS via SVG)~~ — restrito a imagens raster (PNG/JPG/WEBP/GIF).
 - [ ] 🔴 Implementar **refresh token** (token de acesso curto + refresh longo).
 - [ ] 🟡 **Recuperação de senha** (gerar token por e-mail, endpoint de redefinição).
 - [ ] 🟡 CRUD de **usuários do admin** (criar/editar/desativar) — rota `/api/admin/usuarios`.
 - [ ] 🟡 Diferenciar permissões entre `ADMIN` e `EDITOR` (usar `@PreAuthorize` por método).
-- [ ] 🟡 **Rate limiting** nos endpoints públicos (`/api/protocolos`, `/api/contato`) contra abuso/spam.
+- [x] 🔴 ~~Bloqueio após N tentativas de login~~ — feito (`LoginAttemptService`, 5 tentativas/15min por IP, retorna 429).
+- [ ] 🟡 **Rate limiting** também nos demais públicos (`/api/protocolos`, `/api/contato`) contra spam.
+- [ ] 🟡 Mover o rate limit para Caffeine/Redis (hoje é em memória, vale para 1 instância) e tratar `X-Forwarded-For` atrás de proxy.
 - [ ] 🟢 Auditoria: registrar quem alterou status/conteúdo (campos `criado_por`/`atualizado_por`).
-- [ ] 🟢 Bloqueio após N tentativas de login malsucedidas.
 
 ## 2. Domínio Protocolo
 
@@ -31,9 +35,8 @@ conteúdo do site, contato e upload de arquivos. As tarefas abaixo evoluem essa 
 - [ ] 🟡 **Histórico de tramitação** (entidade `MovimentacaoProtocolo`: status anterior, novo, autor, data, observação).
 - [ ] 🟡 Busca/filtro avançado de protocolos (por CPF, período, tipo, texto na descrição).
 - [ ] 🟡 Validação de **CPF** (dígitos verificadores) — criar `@CpfValido`.
-- [ ] 🟡 **Mascarar PII** na resposta pública de acompanhamento (ex.: exibir CPF como `***.***.***-12`),
-      retornando os dados completos apenas nos endpoints `/api/admin/**`.
-- [ ] 🟡 Validar o **conteúdo real** do anexo (magic bytes), não só o `content-type` declarado pelo cliente.
+- [x] 🟡 ~~Mascarar PII na resposta pública~~ — feito (`ProtocoloPublicoResponse` mascara o CPF; CPF completo só em `/api/admin/**`).
+- [ ] 🟡 Validar o **conteúdo real** do anexo/imagem (magic bytes), não só o `content-type` declarado pelo cliente.
 - [ ] 🟢 Exportar protocolos para CSV/PDF (relatórios para a gestão).
 - [ ] 🟢 Limitar tamanho de anexos por configuração e quantidade máxima por protocolo.
 

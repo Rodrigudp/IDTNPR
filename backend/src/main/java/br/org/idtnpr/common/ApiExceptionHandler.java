@@ -32,6 +32,11 @@ public class ApiExceptionHandler {
         return build(HttpStatus.UNAUTHORIZED, "Credenciais inválidas.");
     }
 
+    @ExceptionHandler(RateLimitExcedidoException.class)
+    public ResponseEntity<ErroResponse> rateLimit(RateLimitExcedidoException ex) {
+        return build(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroResponse> validacao(MethodArgumentNotValidException ex) {
         List<ErroResponse.CampoComErro> campos = ex.getBindingResult().getFieldErrors().stream()

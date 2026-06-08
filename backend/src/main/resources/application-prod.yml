@@ -1,10 +1,19 @@
 # Perfil de produção.
-# Todas as credenciais devem vir de variáveis de ambiente (nunca commitadas).
+# Todas as credenciais (DB_PASSWORD, ADMIN_SENHA, etc.) DEVEM vir de variáveis
+# de ambiente — não há defaults no application.yml, então a app falha ao subir
+# se algum segredo obrigatório estiver faltando.
 spring:
   jpa:
     properties:
       hibernate:
         show_sql: false
+
+# Desliga a documentação interativa em produção (não expor o mapa da API).
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
 
 logging:
   level:
