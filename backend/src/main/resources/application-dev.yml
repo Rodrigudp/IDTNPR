@@ -1,0 +1,13 @@
+# Perfil de desenvolvimento.
+# Sobe junto com o perfil "dev" (padrão). Ajuste conforme seu PostgreSQL local.
+spring:
+  jpa:
+    properties:
+      hibernate:
+        # Mostra o SQL gerado no console durante o desenvolvimento.
+        show_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    br.org.idtnpr: DEBUG

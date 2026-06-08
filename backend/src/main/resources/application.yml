@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: idtnpr-api
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/idtnpr}
+    username: ${DB_USER:idtnpr}
+    password: ${DB_PASSWORD:idtnpr}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Quem cria/altera o schema é o Flyway, não o Hibernate.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  servlet:
+    multipart:
+      # Limites de upload (anexos de protocolo e imagens do site).
+      max-file-size: 10MB
+      max-request-size: 30MB
+
+# Chaves RSA usadas para assinar (privada) e validar (pública) os JWTs.
+# O Spring Boot converte automaticamente os arquivos PEM em RSAPublicKey/RSAPrivateKey.
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
+
+# Configurações da aplicação (com valores padrão sobrescrevíveis por variável de ambiente).
+app:
+  # Origens permitidas no CORS (frontend). Separe múltiplas por vírgula.
+  cors-allowed-origins: ${CORS_ORIGINS:http://localhost:5500,http://127.0.0.1:5500}
+  # Tempo de expiração do token de acesso, em minutos.
+  jwt-expiration-minutes: ${JWT_EXP_MINUTES:480}
+  # Diretório onde os arquivos enviados são gravados.
+  storage-dir: ${STORAGE_DIR:./uploads}
+  # Credenciais do admin criado na primeira execução (DataSeeder).
+  admin:
+    nome: ${ADMIN_NOME:Administrador IDTNPR}
+    email: ${ADMIN_EMAIL:admin@idtnpr.org.br}
+    senha: ${ADMIN_SENHA:troque-esta-senha}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    org.springframework.security: INFO

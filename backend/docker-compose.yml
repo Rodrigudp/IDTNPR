@@ -1,0 +1,28 @@
+# Sobe o PostgreSQL de desenvolvimento já com as credenciais que o
+# application.yml espera (idtnpr / idtnpr / idtnpr na porta 5432).
+#
+# Uso:
+#   docker compose up -d     # inicia em segundo plano
+#   docker compose down      # para (mantém os dados)
+#   docker compose down -v   # para e APAGA os dados (banco limpo)
+
+services:
+  db:
+    image: postgres:16
+    container_name: idtnpr-db
+    environment:
+      POSTGRES_DB: idtnpr
+      POSTGRES_USER: idtnpr
+      POSTGRES_PASSWORD: idtnpr
+    ports:
+      - "5432:5432"
+    volumes:
+      - idtnpr_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U idtnpr -d idtnpr"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  idtnpr_pgdata:
