@@ -35,12 +35,6 @@ br.org.idtnpr
    docker run --name idtnpr-db -e POSTGRES_DB=idtnpr -e POSTGRES_USER=idtnpr -e POSTGRES_PASSWORD=idtnpr -p 5432:5432 -d postgres:16
    ```
 4. **Chaves RSA** geradas em `src/main/resources/certs/` — ver `certs/README.md`.
-5. **Arquivo `.env`** com as variáveis locais. Copie o modelo:
-   ```powershell
-   Copy-Item .env.example .env   # (Linux/Mac: cp .env.example .env)
-   ```
-   O `.env` é carregado automaticamente em dev (via `springboot4-dotenv`) e **não é versionado**.
-   `DB_PASSWORD` e `ADMIN_SENHA` são obrigatórias.
 
 ## Como rodar
 
@@ -87,29 +81,17 @@ curl http://localhost:8080/api/admin/protocolos \
 | GET/PATCH | `/api/admin/mensagens/**` | ADMIN | Caixa de entrada do contato |
 | POST | `/api/admin/arquivos` | ADMIN | Upload de imagens |
 
-## Configuração por ambiente (12-factor)
+## Configuração por ambiente
 
-Toda a configuração vem de **variáveis de ambiente** — nenhum segredo é versionado:
-
-- **Dev:** as variáveis ficam no arquivo `.env` (copiado de `.env.example`), carregado
-  automaticamente pelo `springboot4-dotenv`. O `.env` está no `.gitignore`.
-- **Prod:** defina as variáveis no ambiente do servidor (ou secret manager). **Não** há
-  defaults para `DB_PASSWORD` e `ADMIN_SENHA`, então a aplicação falha ao subir se elas
-  faltarem — proteção contra senhas fracas/conhecidas em produção.
-
-Variáveis disponíveis: `DB_URL`, `DB_USER`, `DB_PASSWORD`, `CORS_ORIGINS`, `JWT_EXP_MINUTES`,
-`STORAGE_DIR`, `ADMIN_NOME`, `ADMIN_EMAIL`, `ADMIN_SENHA`, `SERVER_PORT`, `SPRING_PROFILES_ACTIVE`.
+Tudo é sobrescrevível por variável de ambiente (ver `application.yml`):
+`DB_URL`, `DB_USER`, `DB_PASSWORD`, `CORS_ORIGINS`, `JWT_EXP_MINUTES`, `STORAGE_DIR`,
+`ADMIN_EMAIL`, `ADMIN_SENHA`, `SPRING_PROFILES_ACTIVE`.
 
 ## Testes
 
 ```bash
 mvn test
 ```
-
-## Segurança
-
-Modelo de segurança, tratamento de segredos (12-factor) e checklist de produção em
-[`SECURITY.md`](SECURITY.md).
 
 ## Próximos passos
 

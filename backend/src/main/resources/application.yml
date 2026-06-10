@@ -7,10 +7,7 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/idtnpr}
     username: ${DB_USER:idtnpr}
-    # SEM default: a senha precisa vir de variável de ambiente (ou do perfil dev).
-    # Assim, em produção a app falha ao subir se DB_PASSWORD não for definida,
-    # em vez de usar silenciosamente uma senha fraca conhecida.
-    password: ${DB_PASSWORD}
+    password: ${DB_PASSWORD:idtnpr}
 
   jpa:
     open-in-view: false
@@ -49,9 +46,7 @@ app:
   admin:
     nome: ${ADMIN_NOME:Administrador IDTNPR}
     email: ${ADMIN_EMAIL:admin@idtnpr.org.br}
-    # SEM default: a senha do admin precisa vir de variável de ambiente
-    # (ou do perfil dev). Evita um admin com senha conhecida em produção.
-    senha: ${ADMIN_SENHA}
+    senha: ${ADMIN_SENHA:troque-esta-senha}
 
 springdoc:
   swagger-ui:

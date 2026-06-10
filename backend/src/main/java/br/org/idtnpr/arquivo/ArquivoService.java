@@ -11,21 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Set;
 
 /**
  * Orquestra a gravação física (ArmazenamentoService) e os metadados (Arquivo) dos uploads.
  */
 @Service
 public class ArquivoService {
-
-    /**
-     * Tipos aceitos no upload do site (logo/hero). Apenas imagens RASTER —
-     * propositalmente sem SVG, que pode embutir JavaScript e causar XSS
-     * armazenado quando servido inline na mesma origem da API.
-     */
-    private static final Set<String> TIPOS_IMAGEM_PERMITIDOS = Set.of(
-            "image/png", "image/jpeg", "image/webp", "image/gif");
 
     private final ArquivoRepository arquivoRepository;
     private final ArmazenamentoService armazenamentoService;
@@ -37,7 +28,6 @@ public class ArquivoService {
 
     @Transactional
     public ArquivoResponse enviar(MultipartFile arquivo) {
-        validarImagem(arquivo);
         String caminho = armazenamentoService.salvar(arquivo, "site");
         Arquivo entidade = new Arquivo(
                 arquivo.getOriginalFilename(),
@@ -46,16 +36,6 @@ public class ArquivoService {
                 caminho
         );
         return ArquivoResponse.de(arquivoRepository.save(entidade));
-    }
-
-    private void validarImagem(MultipartFile arquivo) {
-        if (arquivo == null || arquivo.isEmpty()) {
-            throw new RegraNegocioException("Arquivo vazio.");
-        }
-        String contentType = arquivo.getContentType();
-        if (contentType == null || !TIPOS_IMAGEM_PERMITIDOS.contains(contentType)) {
-            throw new RegraNegocioException("Tipo de imagem não permitido. Aceitos: PNG, JPG, WEBP, GIF.");
-        }
     }
 
     @Transactional(readOnly = true)

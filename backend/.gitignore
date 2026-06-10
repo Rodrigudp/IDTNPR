@@ -18,8 +18,5 @@ uploads/
 ### Chaves RSA (NÃO versionar segredos) ###
 src/main/resources/certs/*.pem
 
-### Variáveis de ambiente locais (segredos) ###
+### Variáveis de ambiente locais ###
 .env
-.env.*
-# ...mas o molde versionado deve ser mantido:
-!.env.example

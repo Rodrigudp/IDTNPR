@@ -21,21 +21,7 @@
     <properties>
         <java.version>21</java.version>
         <springdoc.version>3.0.3</springdoc.version>
-        <dotenv.version>5.1.0</dotenv.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- Suporte a arquivo .env (carrega variáveis de ambiente em dev) -->
-            <dependency>
-                <groupId>me.paulschwarz</groupId>
-                <artifactId>spring-dotenv-bom</artifactId>
-                <version>${dotenv.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- Web MVC (no Spring Boot 4 o starter foi renomeado para "webmvc") -->
@@ -90,14 +76,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
-        </dependency>
-
-        <!-- Carrega o arquivo .env como fonte de propriedades (auto-integra ao Boot 4).
-             Em produção não há .env: as variáveis vêm do ambiente real. -->
-        <dependency>
-            <groupId>me.paulschwarz</groupId>
-            <artifactId>springboot4-dotenv</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- Testes -->

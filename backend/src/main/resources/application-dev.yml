@@ -1,6 +1,5 @@
 # Perfil de desenvolvimento.
-# NÃO contém segredos: as credenciais (DB_PASSWORD, ADMIN_SENHA) vêm do arquivo
-# .env (carregado pelo springboot4-dotenv) — o mesmo mecanismo usado em produção.
+# Sobe junto com o perfil "dev" (padrão). Ajuste conforme seu PostgreSQL local.
 spring:
   jpa:
     properties:
