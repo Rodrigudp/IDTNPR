@@ -1,0 +1,7 @@
+# Segurança: nesta pasta só ficam arquivos enviados pelos usuários.
+# Aqui NUNCA deve rodar nenhum script (PHP, etc.) — apenas servir arquivos.
+php_flag engine off
+
+<FilesMatch "\.(php|phtml|phar|cgi|pl|py)$">
+    Require all denied
+</FilesMatch>
