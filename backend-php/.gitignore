@@ -1,0 +1,16 @@
+# Segredos locais (NUNCA versionar) — mas mantém o modelo .env.example
+.env
+.env.*
+!.env.example
+
+# Arquivos enviados pelos usuários em tempo de execução
+uploads/*
+!uploads/.htaccess
+!uploads/.gitkeep
+
+# Lixo de editores / sistema
+.vscode/
+.idea/
+*.log
+Thumbs.db
+.DS_Store

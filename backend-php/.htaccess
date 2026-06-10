@@ -1,0 +1,25 @@
+# =====================================================================
+# .htaccess  —  Configuração do Apache (servidor da Locaweb)
+# ---------------------------------------------------------------------
+# 1) Manda todas as requisições para o index.php (o roteador único).
+# 2) Garante que o cabeçalho de login (Authorization) chegue ao PHP.
+# 3) Bloqueia o acesso direto a arquivos sensíveis.
+# =====================================================================
+
+RewriteEngine On
+
+# Faz o cabeçalho "Authorization" (token de login) chegar ao PHP.
+# Sem isto, em alguns servidores o login do admin não funcionaria.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Se o que foi pedido NÃO é um arquivo nem uma pasta de verdade,
+# entrega para o index.php tratar (ex.: /api/protocolos).
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# Não deixa baixar arquivos de configuração/dados pelo navegador.
+<FilesMatch "\.(env|sql|md)$">
+    Require all denied
+</FilesMatch>
