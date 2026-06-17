@@ -698,9 +698,11 @@
   .sol-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .qs-stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .news-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -771,13 +773,20 @@
 
 .proto-layout {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: minmax(0, 900px);
+  justify-content: center;
+  width: 100%;
   gap: 48px;
   align-items: start;
 }
 
+.proto-form-col {
+  width: 100%;
+}
+
 /* Form Card */
 .proto-form-card {
+  width: 100%;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
