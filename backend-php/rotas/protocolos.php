@@ -1,62 +1,61 @@
 <?php
-// =====================================================================
-// rotas/protocolos.php
-// ---------------------------------------------------------------------
-// Protocolo Digital: o cidadão abre uma solicitação, acompanha pelo
-// número e pode anexar arquivos. O admin lista e muda o status.
-//
-// Rotas públicas:
-//   POST /api/protocolos                  -> abrir solicitação
-//   GET  /api/protocolos/{numero}         -> acompanhar (CPF mascarado)
-//   POST /api/protocolos/{numero}/anexos  -> anexar arquivo
-// Rotas do admin (exigem login):
-//   GET   /api/admin/protocolos                  -> listar
-//   GET   /api/admin/protocolos/{numero}         -> detalhar (CPF completo)
-//   PATCH /api/admin/protocolos/{numero}/status  -> mudar status
-// =====================================================================
 
 defined('IDTNPR') or exit('Acesso negado.');
 
-// Tipos de solicitação aceitos (igual ao back-end antigo).
 const TIPOS_SOLICITACAO = array(
     'INFORMACAO', 'SOLICITACAO_SERVICO', 'RECLAMACAO', 'DENUNCIA', 'ELOGIO', 'OUTRO',
 );
 
-// Estados possíveis de um protocolo.
 const STATUS_PROTOCOLO = array('ABERTO', 'EM_ANALISE', 'CONCLUIDO', 'ARQUIVADO');
-
-// Tipos de anexo aceitos no protocolo.
 const TIPOS_ANEXO = array('application/pdf', 'image/jpeg', 'image/png');
 
-/**
- * Para cada status, diz para quais outros ele pode mudar.
- * (Regra de negócio: revise conforme o fluxo real do IDTNPR.)
- */
 function transicoes_permitidas($status)
 {
     switch ($status) {
         case 'ABERTO':     return array('EM_ANALISE', 'ARQUIVADO');
         case 'EM_ANALISE': return array('CONCLUIDO', 'ARQUIVADO');
         case 'CONCLUIDO':  return array('ARQUIVADO');
-        default:           return array(); // ARQUIVADO é estado final
+        default:           return array();
     }
 }
 
-// ---------------------------------------------------------------------
-// Funções auxiliares
-// ---------------------------------------------------------------------
+function tipo_solicitacao_id($sigla)
+{
+    $linha = consultar(
+        'SELECT tipid FROM tipos_solicitacao WHERE tipsigla = ? AND tipexclusao IS NULL AND tipativo = TRUE',
+        array($sigla)
+    )->fetch();
 
-/** Gera um número de protocolo imprevisível: "2026-AB12CD..." (impossível de adivinhar). */
+    if (!$linha) {
+        responder_erro(400, 'Tipo de solicitacao nao cadastrado: ' . $sigla);
+    }
+
+    return (int) $linha['tipid'];
+}
+
+function status_solicitacao_id($sigla)
+{
+    $linha = consultar(
+        'SELECT stsid FROM status_solicitacao WHERE stssigla = ? AND stsexclusao IS NULL AND stsativo = TRUE',
+        array($sigla)
+    )->fetch();
+
+    if (!$linha) {
+        responder_erro(400, 'Status de solicitacao nao cadastrado: ' . $sigla);
+    }
+
+    return (int) $linha['stsid'];
+}
+
 function gerar_numero_protocolo()
 {
     do {
         $numero = date('Y') . '-' . strtoupper(bin2hex(random_bytes(12)));
-        $existe = consultar('SELECT 1 FROM protocolo WHERE numero = ?', array($numero))->fetch();
+        $existe = consultar('SELECT 1 FROM solicitacoes WHERE solnumero = ?', array($numero))->fetch();
     } while ($existe);
     return $numero;
 }
 
-/** Mantém só os 2 últimos dígitos do CPF: "***.***.***-12". */
 function mascarar_cpf($cpf)
 {
     if ($cpf === null || strlen($cpf) < 2) {
@@ -65,61 +64,60 @@ function mascarar_cpf($cpf)
     return '***.***.***-' . substr($cpf, -2);
 }
 
-/** Busca um protocolo pelo número (ou responde 404). */
 function buscar_protocolo($numero)
 {
-    $p = consultar('SELECT * FROM protocolo WHERE numero = ?', array($numero))->fetch();
+    $p = consultar(
+        'SELECT s.*, t.tipsigla AS tipo_solicitacao, st.stssigla AS status
+         FROM solicitacoes s
+         JOIN tipos_solicitacao t ON t.tipid = s.soltipoid
+         JOIN status_solicitacao st ON st.stsid = s.solstatusid
+         WHERE s.solnumero = ? AND s.solexclusao IS NULL',
+        array($numero)
+    )->fetch();
+
     if (!$p) {
         responder_erro(404, 'Protocolo nao encontrado: ' . $numero);
     }
     return $p;
 }
 
-/** Lista os anexos de um protocolo. */
-function anexos_do_protocolo($protocoloId)
+function anexos_do_protocolo($solicitacaoId)
 {
-    return consultar('SELECT * FROM anexo WHERE protocolo_id = ? ORDER BY id', array($protocoloId))->fetchAll();
+    return consultar(
+        'SELECT * FROM anexos_solicitacoes WHERE anxsolicitacaoid = ? AND anxexclusao IS NULL ORDER BY anxid',
+        array($solicitacaoId)
+    )->fetchAll();
 }
 
-/** Monta o JSON de um anexo. */
 function anexo_para_array($a)
 {
     return array(
-        'id'           => (int) $a['id'],
-        'nomeOriginal' => $a['nome_original'],
-        'contentType'  => $a['content_type'],
-        'tamanhoBytes' => $a['tamanho_bytes'] !== null ? (int) $a['tamanho_bytes'] : null,
+        'id'           => (int) $a['anxid'],
+        'nomeOriginal' => $a['anxnomeoriginal'],
+        'contentType'  => $a['anxcontenttype'],
+        'tamanhoBytes' => $a['anxtamanho'] !== null ? (int) $a['anxtamanho'] : null,
     );
 }
 
-/**
- * Monta o JSON de um protocolo. Se $mascarar = true, o CPF sai mascarado
- * (usado nas respostas públicas, por causa da LGPD).
- */
 function protocolo_para_array($p, $mascarar)
 {
-    $anexos = anexos_do_protocolo($p['id']);
+    $anexos = anexos_do_protocolo($p['solid']);
 
     return array(
-        'numero'          => $p['numero'],
-        'nome'            => $p['nome'],
-        'cpf'             => $mascarar ? mascarar_cpf($p['cpf']) : $p['cpf'],
-        'email'           => $p['email'],
-        'telefone'        => $p['telefone'],
+        'numero'          => $p['solnumero'],
+        'nome'            => $p['solnome'],
+        'cpf'             => $mascarar ? mascarar_cpf($p['solcpf']) : $p['solcpf'],
+        'email'           => $p['solemail'],
+        'telefone'        => $p['soltelefone'],
         'tipoSolicitacao' => $p['tipo_solicitacao'],
-        'descricao'       => $p['descricao'],
+        'descricao'       => $p['soldescricao'],
         'status'          => $p['status'],
-        'criadoEm'        => data_iso($p['criado_em']),
-        'atualizadoEm'    => data_iso($p['atualizado_em']),
+        'criadoEm'        => data_iso($p['solinclusao']),
+        'atualizadoEm'    => data_iso($p['solinclusao']),
         'anexos'          => array_map('anexo_para_array', $anexos),
     );
 }
 
-// ---------------------------------------------------------------------
-// Rotas públicas
-// ---------------------------------------------------------------------
-
-/** POST /api/protocolos */
 function abrir_protocolo($params)
 {
     $dados = ler_json();
@@ -147,50 +145,42 @@ function abrir_protocolo($params)
     v_finalizar($erros);
 
     $numero = gerar_numero_protocolo();
+    $tipoId = tipo_solicitacao_id($tipo);
+    $statusId = status_solicitacao_id('ABERTO');
 
     consultar(
-        'INSERT INTO protocolo (numero, nome, cpf, email, telefone, tipo_solicitacao, descricao, status, criado_em, atualizado_em)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())',
-        array($numero, $nome, $cpf, $email, $telefone, $tipo, $descricao, 'ABERTO')
+        'INSERT INTO solicitacoes
+            (solnumero, solnome, solcpf, solemail, soltelefone, soltipoid, solstatusid, soldescricao, solinclusao)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())',
+        array($numero, $nome, $cpf, $email, $telefone, $tipoId, $statusId, $descricao)
     );
 
     $p = buscar_protocolo($numero);
-    // 201 Created, com a resposta pública (CPF mascarado).
     responder(201, protocolo_para_array($p, true));
 }
 
-/** GET /api/protocolos/{numero} */
 function acompanhar_protocolo($params)
 {
     $p = buscar_protocolo($params['numero']);
     responder(200, protocolo_para_array($p, true));
 }
 
-/** POST /api/protocolos/{numero}/anexos  (campo do formulário: "arquivo") */
 function anexar_protocolo($params)
 {
     $p = buscar_protocolo($params['numero']);
-
     $dados = salvar_upload('arquivo', 'protocolos', TIPOS_ANEXO, 'PDF, JPG, PNG');
 
     consultar(
-        'INSERT INTO anexo (protocolo_id, nome_original, content_type, tamanho_bytes, caminho, criado_em)
+        'INSERT INTO anexos_solicitacoes
+            (anxsolicitacaoid, anxnomeoriginal, anxcontenttype, anxtamanho, anxcaminho, anxinclusao)
          VALUES (?, ?, ?, ?, ?, NOW())',
-        array($p['id'], $dados['nome_original'], $dados['content_type'], $dados['tamanho_bytes'], $dados['caminho'])
+        array($p['solid'], $dados['nome_original'], $dados['content_type'], $dados['tamanho_bytes'], $dados['caminho'])
     );
-
-    // Atualiza a data de "última modificação" do protocolo.
-    consultar('UPDATE protocolo SET atualizado_em = NOW() WHERE id = ?', array($p['id']));
 
     $p = buscar_protocolo($params['numero']);
     responder(200, protocolo_para_array($p, true));
 }
 
-// ---------------------------------------------------------------------
-// Rotas do admin (exigem login)
-// ---------------------------------------------------------------------
-
-/** GET /api/admin/protocolos?status=...&page=0&size=20 */
 function admin_listar_protocolos($params)
 {
     exigir_admin();
@@ -201,34 +191,37 @@ function admin_listar_protocolos($params)
     if ($size < 1)   { $size = 20; }
     if ($size > 100) { $size = 100; }
 
-    $where = '';
+    $where = ' WHERE s.solexclusao IS NULL';
     $args  = array();
     if ($status !== '') {
         if (!in_array($status, STATUS_PROTOCOLO, true)) {
             responder_erro(400, 'Status invalido. Opcoes: ' . implode(', ', STATUS_PROTOCOLO) . '.');
         }
-        $where = ' WHERE status = ?';
+        $where .= ' AND st.stssigla = ?';
         $args[] = $status;
     }
 
-    $total = (int) consultar('SELECT COUNT(*) FROM protocolo' . $where, $args)->fetchColumn();
+    $base = ' FROM solicitacoes s
+              JOIN tipos_solicitacao t ON t.tipid = s.soltipoid
+              JOIN status_solicitacao st ON st.stsid = s.solstatusid' . $where;
 
-    // LIMIT/OFFSET montados com números inteiros já validados (seguro).
+    $total = (int) consultar('SELECT COUNT(*)' . $base, $args)->fetchColumn();
     $offset = $page * $size;
+
     $linhas = consultar(
-        'SELECT * FROM protocolo' . $where . ' ORDER BY criado_em DESC LIMIT ' . $size . ' OFFSET ' . $offset,
+        'SELECT s.*, t.tipsigla AS tipo_solicitacao, st.stssigla AS status' . $base .
+        ' ORDER BY s.solinclusao DESC LIMIT ' . $size . ' OFFSET ' . $offset,
         $args
     )->fetchAll();
 
     $conteudo = array();
     foreach ($linhas as $p) {
-        $conteudo[] = protocolo_para_array($p, false); // admin vê o CPF completo
+        $conteudo[] = protocolo_para_array($p, false);
     }
 
     responder(200, pagina($conteudo, $page, $size, $total));
 }
 
-/** GET /api/admin/protocolos/{numero} */
 function admin_detalhar_protocolo($params)
 {
     exigir_admin();
@@ -236,7 +229,6 @@ function admin_detalhar_protocolo($params)
     responder(200, protocolo_para_array($p, false));
 }
 
-/** PATCH /api/admin/protocolos/{numero}/status   { "status": "EM_ANALISE" } */
 function admin_atualizar_status($params)
 {
     exigir_admin();
@@ -252,14 +244,13 @@ function admin_atualizar_status($params)
     $p     = buscar_protocolo($params['numero']);
     $atual = $p['status'];
 
-    // Só permite mudanças de status válidas.
     if ($atual !== $novoStatus && !in_array($novoStatus, transicoes_permitidas($atual), true)) {
         responder_erro(400, "Transicao de status invalida: $atual -> $novoStatus");
     }
 
     consultar(
-        'UPDATE protocolo SET status = ?, atualizado_em = NOW() WHERE id = ?',
-        array($novoStatus, $p['id'])
+        'UPDATE solicitacoes SET solstatusid = ? WHERE solid = ?',
+        array(status_solicitacao_id($novoStatus), $p['solid'])
     );
 
     $p = buscar_protocolo($params['numero']);

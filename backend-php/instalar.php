@@ -1,127 +1,130 @@
 <?php
-// =====================================================================
-// instalar.php  —  RODE UMA VEZ para preparar o sistema
-// ---------------------------------------------------------------------
-// O que ele faz:
-//   1) Cria as tabelas do banco (lendo o arquivo banco.sql);
-//   2) Insere o conteúdo inicial do site;
-//   3) Cria o usuário administrador (com a senha do .env, já criptografada).
-//
-// Como usar:
-//   - Configure o arquivo .env (copie de .env.example) com os dados do
-//     banco da Locaweb e a senha do admin (ADMIN_SENHA).
-//   - Abra este arquivo no navegador:  https://seusite.com.br/api/instalar.php
-//   - Quando aparecer "Instalacao concluida", APAGUE este arquivo do servidor.
-//
-// Pode rodar mais de uma vez sem problema (não duplica nada).
-// =====================================================================
 
 define('IDTNPR', true);
+
 require __DIR__ . '/config.php';
+require __DIR__ . '/lib/http.php';
+require __DIR__ . '/lib/banco.php';
 
-header('Content-Type: text/html; charset=utf-8');
-
-// Pequena função para imprimir uma linha de status na tela.
 function passo($texto, $ok = true)
 {
-    $cor = $ok ? '#15803d' : '#b91c1c';
-    $marca = $ok ? 'OK ' : 'ERRO ';
-    echo '<p style="font-family:monospace;margin:4px 0;color:' . $cor . '">'
-        . $marca . htmlspecialchars($texto) . '</p>';
+    echo '<p style="font-family:Arial,sans-serif;color:' . ($ok ? '#14532d' : '#991b1b') . '">';
+    echo ($ok ? 'OK - ' : 'ERRO - ') . htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
+    echo '</p>';
+    if (!$ok) {
+        exit;
+    }
 }
 
-echo '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'
-    . '<title>Instalacao - IDTNPR</title></head><body style="max-width:760px;margin:40px auto;'
-    . 'font-family:sans-serif;color:#0f172a;line-height:1.5">';
-echo '<h1>Instalação do back-end IDTNPR</h1>';
+echo '<h1 style="font-family:Arial,sans-serif">Instalacao IDTNPR</h1>';
 
-// ---- 1) Conecta no banco ----
 try {
-    $pdo = new PDO(
-        'mysql:host=' . env('DB_HOST', 'localhost')
-            . ';port=' . env('DB_PORT', '3306')
-            . ';dbname=' . env('DB_NAME', 'idtnpr')
-            . ';charset=utf8mb4',
-        env('DB_USER', 'root'),
-        env('DB_PASSWORD', ''),
-        array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+    banco();
+    passo('Conexao com PostgreSQL realizada.');
+} catch (Throwable $e) {
+    passo('Falha ao conectar no PostgreSQL: ' . $e->getMessage(), false);
+}
+
+try {
+    consultar(
+        "INSERT INTO tipos_solicitacao (tipnome, tipsigla, tipativo, tipinclusao)
+         VALUES
+            ('Informacao', 'INFORMACAO', TRUE, NOW()),
+            ('Solicitacao de servico', 'SOLICITACAO_SERVICO', TRUE, NOW()),
+            ('Reclamacao', 'RECLAMACAO', TRUE, NOW()),
+            ('Denuncia', 'DENUNCIA', TRUE, NOW()),
+            ('Elogio', 'ELOGIO', TRUE, NOW()),
+            ('Outro', 'OUTRO', TRUE, NOW())
+         ON CONFLICT (tipsigla) DO NOTHING"
     );
-    passo('Conectado ao banco de dados.');
-} catch (PDOException $e) {
-    passo('Nao foi possivel conectar ao banco. Confira DB_HOST, DB_NAME, DB_USER e DB_PASSWORD no .env.', false);
-    passo('Detalhe: ' . $e->getMessage(), false);
-    exit;
-}
-
-// ---- 2) Cria as tabelas e o conteúdo inicial (a partir do banco.sql) ----
-$sql = file_get_contents(__DIR__ . '/banco.sql');
-if ($sql === false) {
-    passo('Arquivo banco.sql nao encontrado.', false);
-    exit;
-}
-
-// Remove o "BOM" (marca invisível que alguns editores, como o Bloco de Notas,
-// colocam no início do arquivo) — senão ele atrapalharia o primeiro comando.
-$sql = preg_replace('/^\xEF\xBB\xBF/', '', $sql);
-
-try {
-    // Remove as linhas que são só comentário (começam com --), para o
-    // arquivo ser dividido em comandos de forma limpa.
-    $linhas = preg_split('/\r\n|\r|\n/', $sql);
-    $limpo = array();
-    foreach ($linhas as $linha) {
-        if (preg_match('/^\s*--/', $linha)) {
-            continue;
-        }
-        $limpo[] = $linha;
-    }
-    $sqlLimpo = implode("\n", $limpo);
-
-    // Cada comando SQL termina em ";". Executa um por um.
-    foreach (explode(';', $sqlLimpo) as $comando) {
-        if (trim($comando) === '') {
-            continue;
-        }
-        $pdo->exec($comando);
-    }
-    passo('Tabelas e conteudo inicial criados (ou ja existiam).');
-} catch (PDOException $e) {
-    passo('Falha ao criar as tabelas: ' . $e->getMessage(), false);
-    exit;
-}
-
-// ---- 3) Cria o usuário administrador ----
-$nomeAdmin  = env('ADMIN_NOME', 'Administrador IDTNPR');
-$emailAdmin = env('ADMIN_EMAIL', 'admin@idtnpr.org.br');
-$senhaAdmin = env('ADMIN_SENHA');
-
-if (!$senhaAdmin) {
-    passo('Defina ADMIN_SENHA no arquivo .env antes de instalar.', false);
-    exit;
+    passo('Tipos de solicitacao conferidos.');
+} catch (Throwable $e) {
+    passo('Falha ao criar tipos de solicitacao: ' . $e->getMessage(), false);
 }
 
 try {
-    $ja = $pdo->prepare('SELECT id FROM usuario WHERE email = ?');
-    $ja->execute(array($emailAdmin));
+    consultar(
+        "INSERT INTO status_solicitacao (stsnome, stssigla, stsordem, stsativo, stsinclusao)
+         VALUES
+            ('Aberto', 'ABERTO', 1, TRUE, NOW()),
+            ('Em analise', 'EM_ANALISE', 2, TRUE, NOW()),
+            ('Concluido', 'CONCLUIDO', 3, TRUE, NOW()),
+            ('Arquivado', 'ARQUIVADO', 4, TRUE, NOW())
+         ON CONFLICT (stssigla) DO NOTHING"
+    );
+    passo('Status de solicitacao conferidos.');
+} catch (Throwable $e) {
+    passo('Falha ao criar status de solicitacao: ' . $e->getMessage(), false);
+}
 
-    if ($ja->fetch()) {
-        passo('Usuario admin ja existe: ' . $emailAdmin . ' (nada a fazer).');
-    } else {
-        // password_hash gera o mesmo tipo de hash (BCrypt) usado pelo back-end antigo.
-        $hash = password_hash($senhaAdmin, PASSWORD_BCRYPT);
-        $ins = $pdo->prepare(
-            'INSERT INTO usuario (nome, email, senha, role, enabled) VALUES (?, ?, ?, ?, 1)'
+try {
+    $temConteudo = consultar(
+        'SELECT 1 FROM conteudos_site WHERE consexclusao IS NULL LIMIT 1'
+    )->fetch();
+
+    if (!$temConteudo) {
+        consultar(
+            "INSERT INTO conteudos_site (
+                constituloprincipal, consdestaqueprincipal, consdescricaoprincipal, constextobotao,
+                conssobre, consrecurso1titulo, consrecurso1descricao, consrecurso2titulo,
+                consrecurso2descricao, consrecurso3titulo, consrecurso3descricao,
+                consrecurso4titulo, consrecurso4descricao, constitulochamada,
+                consdescricaochamada, constextobotaochamada, consemailcontato,
+                constelefonecontato, consinclusao
+             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())",
+            array(
+                'Seu municipio pode fazer parte do',
+                'ecossistema de inovacao',
+                'Desenvolvemos solucoes digitais para modernizar servicos publicos, promover transparencia e aproximar cidadaos do governo atraves da tecnologia.',
+                'Solicitar Reuniao Tecnica',
+                'Atuamos na transformacao digital do setor publico, combinando tecnologia, gestao e conhecimento para gerar resultados reais para a sociedade.',
+                'Transformacao Digital Publica',
+                'Solucoes digitais para modernizar servicos e processos publicos.',
+                'Dados e Transparencia',
+                'Inteligencia de dados para decisoes mais eficientes.',
+                'Inovacao e Gestao',
+                'Metodologias que aumentam a eficiencia dos orgaos publicos.',
+                'Capacitacao Tecnica',
+                'Formacao e transferencia de conhecimento para equipes.',
+                'Parcerias que transformam cidades.',
+                'Trabalhamos junto a orgaos publicos, instituicoes e especialistas para transformar realidades e gerar impacto positivo.',
+                'QUERO SER PARCEIRO',
+                'contato@idtnpr.org.br',
+                '(44) 99999-9999'
+            )
         );
-        $ins->execute(array($nomeAdmin, $emailAdmin, $hash, 'ADMIN'));
+    }
+    passo('Conteudo inicial conferido.');
+} catch (Throwable $e) {
+    passo('Falha ao criar conteudo inicial: ' . $e->getMessage(), false);
+}
+
+$emailAdmin = env('ADMIN_EMAIL', 'admin@idtnpr.org.br');
+$senhaAdmin = env('ADMIN_SENHA', '');
+$nomeAdmin  = env('ADMIN_NOME', 'Administrador IDTNPR');
+
+if ($senhaAdmin === '' || $senhaAdmin === 'defina-uma-senha-forte') {
+    passo('Defina ADMIN_SENHA no arquivo .env antes de instalar.', false);
+}
+
+try {
+    $ja = consultar(
+        'SELECT usuid FROM usuarios WHERE usuemail = ? AND usuexclusao IS NULL',
+        array($emailAdmin)
+    )->fetch();
+
+    if ($ja) {
+        passo('Usuario admin ja existe: ' . $emailAdmin);
+    } else {
+        consultar(
+            'INSERT INTO usuarios (usunome, usuemail, ususenha, usuinclusao) VALUES (?, ?, ?, NOW())',
+            array($nomeAdmin, $emailAdmin, password_hash($senhaAdmin, PASSWORD_BCRYPT))
+        );
         passo('Usuario admin criado: ' . $emailAdmin);
     }
-} catch (PDOException $e) {
-    passo('Falha ao criar o usuario admin: ' . $e->getMessage(), false);
-    exit;
+} catch (Throwable $e) {
+    passo('Falha ao criar usuario admin: ' . $e->getMessage(), false);
 }
 
-echo '<h2 style="color:#15803d">Instalação concluída!</h2>';
-echo '<p><strong>Importante:</strong> por segurança, <strong>APAGUE o arquivo instalar.php</strong> '
-    . 'do servidor agora. Ele não é mais necessário.</p>';
-echo '<p>Teste a API abrindo: <code>/api/health</code> (deve responder <code>{"status":"ok"}</code>).</p>';
-echo '</body></html>';
+echo '<p style="font-family:Arial,sans-serif"><strong>Instalacao concluida.</strong></p>';
+echo '<p style="font-family:Arial,sans-serif">Por seguranca, apague o arquivo <code>instalar.php</code> depois de usar.</p>';

@@ -1,18 +1,7 @@
 <?php
-// =====================================================================
-// lib/banco.php
-// ---------------------------------------------------------------------
-// Conexão com o banco de dados MySQL (o banco usado na Locaweb).
-// Usamos PDO, que é a forma recomendada e segura de acessar o banco
-// no PHP (com "prepared statements", que evitam SQL injection).
-// =====================================================================
 
 defined('IDTNPR') or exit('Acesso negado.');
 
-/**
- * Devolve a conexão com o banco. Na primeira chamada conecta; nas
- * próximas, reaproveita a mesma conexão (graças ao "static").
- */
 function banco()
 {
     static $pdo = null;
@@ -21,20 +10,17 @@ function banco()
     }
 
     $host  = env('DB_HOST', 'localhost');
-    $porta = env('DB_PORT', '3306'); // a Locaweb usa 3306 (padrão); troque se o seu host pedir
-    $nome  = env('DB_NAME', 'idtnpr');
-    $user  = env('DB_USER', 'root');
+    $porta = env('DB_PORT', '5432');
+    $nome  = env('DB_NAME', 'testeextensao');
+    $user  = env('DB_USER', 'postgres');
     $senha = env('DB_PASSWORD', '');
 
-    $dsn = "mysql:host=$host;port=$porta;dbname=$nome;charset=utf8mb4";
+    $dsn = "pgsql:host=$host;port=$porta;dbname=$nome";
 
     try {
         $pdo = new PDO($dsn, $user, $senha, array(
-            // Erros do banco viram exceções (mais fácil de detectar problemas).
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            // Resultados vêm como arrays com nomes de coluna ("id", "nome"...).
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            // Usa prepared statements de verdade (mais seguro).
             PDO::ATTR_EMULATE_PREPARES   => false,
         ));
     } catch (PDOException $e) {
@@ -44,11 +30,6 @@ function banco()
     return $pdo;
 }
 
-/**
- * Atalho para executar uma consulta SQL com parâmetros.
- * Exemplo:  consultar('SELECT * FROM projeto WHERE id = ?', array($id))
- * Devolve o "statement", de onde você lê os resultados com ->fetch() / ->fetchAll().
- */
 function consultar($sql, $parametros = array())
 {
     $stmt = banco()->prepare($sql);
