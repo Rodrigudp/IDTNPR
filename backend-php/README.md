@@ -30,7 +30,7 @@ sem frameworks, sem Composer, sem instalar nada — só PHP e MySQL.
 ## O que você precisa
 
 - **PHP 7.4 ou superior** (a Locaweb oferece; ative no painel se necessário).
-- **Banco de dados MySQL 5.7+** (criado no painel da Locaweb).
+- **Banco de dados MySQL 5.7+** no DBaaS informado pelo professor.
 - Extensões do PHP: `pdo_mysql` e `fileinfo` (já vêm ativas por padrão).
 
 ---
@@ -66,15 +66,15 @@ backend-php/
 
 ## Como colocar no ar na Locaweb (passo a passo)
 
-1. **Crie o banco MySQL** no painel da Locaweb. Anote: host, nome do banco, usuário e senha.
+1. **Use o banco MySQL DBaaS informado pelo professor**. O acesso é feito pela aplicação como cliente MySQL externo, usando host, porta, nome do banco, usuário e senha. Não há phpMyAdmin para esse serviço.
 
 2. **Envie os arquivos** desta pasta (`backend-php/`) para o servidor, dentro de uma pasta
    chamada **`api`** na raiz do site. Assim os endereços ficam, por exemplo:
    `https://seusite.com.br/api/protocolos`
    (Pode enviar por FTP, pelo Gerenciador de Arquivos da Locaweb, etc.)
 
-3. **Crie o arquivo `.env`**: copie o `.env.example` para `.env` e preencha com os dados do
-   banco (passo 1), uma `ADMIN_SENHA` forte e um `JWT_SECRET` longo e aleatório.
+3. **Crie o arquivo `.env`**: copie o `.env.example` para `.env` e preencha a senha real do
+   banco DBaaS, uma `ADMIN_SENHA` forte e um `JWT_SECRET` longo e aleatório.
 
 4. **Rode a instalação**: abra no navegador
    `https://seusite.com.br/api/instalar.php`

@@ -220,5 +220,5 @@ function admin_remover_projeto($params)
     }
 
     consultar('DELETE FROM projeto WHERE id = ?', array($id));
-    responder_vazio(204); // 204 = sucesso, sem conteúdo na resposta
+    responder_vazio(204); 
 }

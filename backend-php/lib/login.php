@@ -25,10 +25,7 @@ function ip_cliente()
     return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
 }
 
-/**
- * Diz se o IP está bloqueado: tem 5+ tentativas E ainda está dentro da
- * janela de 15 minutos. (Se a janela já passou, a linha é ignorada.)
- */
+
 function login_bloqueado($ip)
 {
     $sql = 'SELECT tentativas FROM login_tentativa
@@ -54,7 +51,6 @@ function login_registrar_falha($ip)
     consultar($sql, array($ip));
 }
 
-/** Registra um login que DEU CERTO (zera o contador daquele IP). */
 function login_registrar_sucesso($ip)
 {
     consultar('DELETE FROM login_tentativa WHERE ip = ?', array($ip));

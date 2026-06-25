@@ -69,7 +69,6 @@ function admin_listar_mensagens($params)
     if ($size < 1)   { $size = 20; }
     if ($size > 100) { $size = 100; }
 
-    // Filtro opcional por lida (true/false).
     $where = '';
     $args  = array();
     if (isset($_GET['lida']) && $_GET['lida'] !== '') {

@@ -25,7 +25,6 @@ const TIPOS_SOLICITACAO = array(
 // Estados possíveis de um protocolo.
 const STATUS_PROTOCOLO = array('ABERTO', 'EM_ANALISE', 'CONCLUIDO', 'ARQUIVADO');
 
-// Tipos de anexo aceitos no protocolo.
 const TIPOS_ANEXO = array('application/pdf', 'image/jpeg', 'image/png');
 
 /**
@@ -42,11 +41,6 @@ function transicoes_permitidas($status)
     }
 }
 
-// ---------------------------------------------------------------------
-// Funções auxiliares
-// ---------------------------------------------------------------------
-
-/** Gera um número de protocolo imprevisível: "2026-AB12CD..." (impossível de adivinhar). */
 function gerar_numero_protocolo()
 {
     do {
@@ -75,7 +69,6 @@ function buscar_protocolo($numero)
     return $p;
 }
 
-/** Lista os anexos de um protocolo. */
 function anexos_do_protocolo($protocoloId)
 {
     return consultar('SELECT * FROM anexo WHERE protocolo_id = ? ORDER BY id', array($protocoloId))->fetchAll();
@@ -179,7 +172,6 @@ function anexar_protocolo($params)
         array($p['id'], $dados['nome_original'], $dados['content_type'], $dados['tamanho_bytes'], $dados['caminho'])
     );
 
-    // Atualiza a data de "última modificação" do protocolo.
     consultar('UPDATE protocolo SET atualizado_em = NOW() WHERE id = ?', array($p['id']));
 
     $p = buscar_protocolo($params['numero']);
@@ -213,7 +205,6 @@ function admin_listar_protocolos($params)
 
     $total = (int) consultar('SELECT COUNT(*) FROM protocolo' . $where, $args)->fetchColumn();
 
-    // LIMIT/OFFSET montados com números inteiros já validados (seguro).
     $offset = $page * $size;
     $linhas = consultar(
         'SELECT * FROM protocolo' . $where . ' ORDER BY criado_em DESC LIMIT ' . $size . ' OFFSET ' . $offset,

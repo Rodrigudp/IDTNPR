@@ -35,14 +35,13 @@ echo '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'
     . 'font-family:sans-serif;color:#0f172a;line-height:1.5">';
 echo '<h1>Instalação do back-end IDTNPR</h1>';
 
-// ---- 1) Conecta no banco ----
 try {
     $pdo = new PDO(
-        'mysql:host=' . env('DB_HOST', 'localhost')
+        'mysql:host=' . env('DB_HOST', 'portalidtnpr.mysql.dbaas.com.br')
             . ';port=' . env('DB_PORT', '3306')
-            . ';dbname=' . env('DB_NAME', 'idtnpr')
+            . ';dbname=' . env('DB_NAME', 'portalidtnpr')
             . ';charset=utf8mb4',
-        env('DB_USER', 'root'),
+        env('DB_USER', 'portalidtnpr'),
         env('DB_PASSWORD', ''),
         array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
     );
@@ -53,20 +52,15 @@ try {
     exit;
 }
 
-// ---- 2) Cria as tabelas e o conteúdo inicial (a partir do banco.sql) ----
 $sql = file_get_contents(__DIR__ . '/banco.sql');
 if ($sql === false) {
     passo('Arquivo banco.sql nao encontrado.', false);
     exit;
 }
 
-// Remove o "BOM" (marca invisível que alguns editores, como o Bloco de Notas,
-// colocam no início do arquivo) — senão ele atrapalharia o primeiro comando.
 $sql = preg_replace('/^\xEF\xBB\xBF/', '', $sql);
 
 try {
-    // Remove as linhas que são só comentário (começam com --), para o
-    // arquivo ser dividido em comandos de forma limpa.
     $linhas = preg_split('/\r\n|\r|\n/', $sql);
     $limpo = array();
     foreach ($linhas as $linha) {
@@ -77,7 +71,6 @@ try {
     }
     $sqlLimpo = implode("\n", $limpo);
 
-    // Cada comando SQL termina em ";". Executa um por um.
     foreach (explode(';', $sqlLimpo) as $comando) {
         if (trim($comando) === '') {
             continue;
@@ -90,7 +83,6 @@ try {
     exit;
 }
 
-// ---- 3) Cria o usuário administrador ----
 $nomeAdmin  = env('ADMIN_NOME', 'Administrador IDTNPR');
 $emailAdmin = env('ADMIN_EMAIL', 'admin@idtnpr.org.br');
 $senhaAdmin = env('ADMIN_SENHA');
@@ -107,7 +99,6 @@ try {
     if ($ja->fetch()) {
         passo('Usuario admin ja existe: ' . $emailAdmin . ' (nada a fazer).');
     } else {
-        // password_hash gera o mesmo tipo de hash (BCrypt) usado pelo back-end antigo.
         $hash = password_hash($senhaAdmin, PASSWORD_BCRYPT);
         $ins = $pdo->prepare(
             'INSERT INTO usuario (nome, email, senha, role, enabled) VALUES (?, ?, ?, ?, 1)'

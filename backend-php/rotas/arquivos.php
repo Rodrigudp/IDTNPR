@@ -37,7 +37,7 @@ function admin_upload_arquivo($params)
         'nomeOriginal' => $dados['nome_original'],
         'contentType'  => $dados['content_type'],
         'tamanhoBytes' => $dados['tamanho_bytes'],
-        'url'          => '/api/arquivos/' . $id, // endereço público para baixar
+        'url'          => '/api/arquivos/' . $id, 
     ));
 }
 
