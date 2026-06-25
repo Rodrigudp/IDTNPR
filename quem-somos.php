@@ -1,3 +1,6 @@
+<?php
+// Arquivo convertido para PHP. Mantenha este arquivo na pasta htdocs do XAMPP.
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,17 +18,17 @@
 
 <header class="header">
   <div class="nav">
-    <a href="index.html" class="logo" aria-label="Página inicial do IDTNPR">
+    <a href="index.php" class="logo" aria-label="Página inicial do IDTNPR">
       <img src="logo.png" alt="Logo IDTNPR" id="site-logo">
     </a>
     <div class="nav-container" id="nav-container">
       <nav aria-label="Menu principal">
-        <a href="index.html#sobre">Sobre</a>
-        <a href="quem-somos.html">Quem Somos</a>
-        <a href="index.html#contato">Fale conosco</a>
-        <a href="noticias.html">Notícias</a>
+        <a href="index.php#sobre">Sobre</a>
+        <a href="quem-somos.php">Quem Somos</a>
+        <a href="index.php#contato">Fale conosco</a>
+        <a href="noticias.php">Notícias</a>
       </nav>
-      <a href="solucoes.html" class="btn-primary">Soluções</a>
+      <a href="solucoes.php" class="btn-primary">Soluções</a>
       <button class="theme-toggle-btn" id="theme-toggle" aria-label="Alternar tema claro/escuro" title="Alternar tema">
         <svg id="theme-icon-sun" class="sun" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
@@ -54,7 +57,7 @@
 <div class="breadcrumb-bar">
   <div class="container">
     <nav class="breadcrumb-nav" aria-label="Breadcrumb">
-      <a href="index.html">Início</a>
+      <a href="index.php">Início</a>
       <span class="sep">/</span>
       <span class="current">Quem Somos</span>
     </nav>
@@ -63,7 +66,6 @@
 
 <main id="conteudo-principal">
 
-  <!-- Page Hero -->
   <section class="page-section page-hero">
     <div class="container">
       <div class="section-header reveal fade-bottom">
@@ -74,7 +76,6 @@
     </div>
   </section>
 
-  <!-- História (Timeline) -->
   <section class="page-section">
     <div class="container">
       <div class="section-header reveal fade-bottom">
@@ -121,7 +122,6 @@
     </div>
   </section>
 
-  <!-- Missão, Visão, Valores -->
   <section class="page-section">
     <div class="container">
       <div class="section-header reveal fade-bottom">
@@ -163,7 +163,6 @@
     </div>
   </section>
 
-  <!-- Números -->
   <section class="page-section">
     <div class="container">
       <div class="section-header reveal fade-bottom">
@@ -195,7 +194,6 @@
     </div>
   </section>
 
-
 </main>
 
 <footer class="footer">
@@ -206,15 +204,15 @@
     </div>
     <div class="reveal fade-bottom" style="transition-delay: 100ms;">
       <h4>Navegação</h4>
-      <a href="index.html#sobre">Sobre o Instituto</a>
-      <a href="quem-somos.html">Quem Somos</a>
-      <a href="solucoes.html">Soluções</a>
-      <a href="noticias.html">Notícias</a>
-      <a href="index.html#contato">Contato</a>
+      <a href="index.php#sobre">Sobre o Instituto</a>
+      <a href="quem-somos.php">Quem Somos</a>
+      <a href="solucoes.php">Soluções</a>
+      <a href="noticias.php">Notícias</a>
+      <a href="index.php#contato">Contato</a>
     </div>
     <div class="reveal fade-bottom" style="transition-delay: 200ms;">
       <h4>Institucional</h4>
-      <a href="quem-somos.html">Equipe</a>
+      <a href="quem-somos.php">Equipe</a>
       <a href="#">Governança</a>
       <a href="#">Transparência</a>
       <a href="#">Trabalhe conosco</a>
@@ -234,7 +232,6 @@
 
 <script>
 (function() {
-  // Theme toggle
   function getPreferredTheme() {
     var stored = localStorage.getItem('theme');
     if (stored) return stored;
@@ -262,7 +259,6 @@
     setTheme(current === 'dark' ? 'light' : 'dark');
   });
 
-  // Mobile menu toggle
   var menuToggle = document.getElementById('menu-toggle');
   var navContainer = document.getElementById('nav-container');
   menuToggle.addEventListener('click', function() {
@@ -272,7 +268,6 @@
     menuToggle.classList.toggle('active');
   });
 
-  // Header scroll effect + back-to-top
   var header = document.querySelector('.header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
@@ -292,7 +287,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Scroll reveal with IntersectionObserver
   var reveals = document.querySelectorAll('.reveal');
   var revealObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -307,7 +301,6 @@
     revealObserver.observe(el);
   });
 
-  // CountUp animation for stats
   var numbers = document.querySelectorAll('.number[data-target]');
   var countObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -315,7 +308,6 @@
         var el = entry.target;
         var target = parseInt(el.getAttribute('data-target'), 10);
         var duration = 2000;
-        var start = 0;
         var startTime = null;
 
         function animate(timestamp) {
