@@ -20,10 +20,10 @@ function banco()
         return $pdo;
     }
 
-    $host  = env('DB_HOST', 'localhost');
-    $porta = env('DB_PORT', '3306'); // a Locaweb usa 3306 (padrão); troque se o seu host pedir
-    $nome  = env('DB_NAME', 'idtnpr');
-    $user  = env('DB_USER', 'root');
+    $host  = env('DB_HOST', 'portalidtnpr.mysql.dbaas.com.br');
+    $porta = env('DB_PORT', '3306'); 
+    $nome  = env('DB_NAME', 'portalidtnpr');
+    $user  = env('DB_USER', 'portalidtnpr');
     $senha = env('DB_PASSWORD', '');
 
     $dsn = "mysql:host=$host;port=$porta;dbname=$nome;charset=utf8mb4";

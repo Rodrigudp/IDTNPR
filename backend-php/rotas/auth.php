@@ -38,7 +38,6 @@ function login($params)
     $ativo        = $usuario && (int) $usuario['enabled'] === 1;
 
     if (!$usuario || !$ativo || !$senhaConfere) {
-        // Mensagem genérica de propósito: não revela se o e-mail existe.
         login_registrar_falha($ip);
         responder_erro(401, 'Credenciais invalidas.');
     }
@@ -52,6 +51,6 @@ function login($params)
     responder(200, array(
         'accessToken' => $token,
         'tokenType'   => 'Bearer',
-        'expiresIn'   => $minutos * 60, // validade em segundos
+        'expiresIn'   => $minutos * 60, 
     ));
 }

@@ -1,27 +1,13 @@
--- =====================================================================
--- banco.sql  —  Estrutura do banco de dados (MySQL / Locaweb)
--- ---------------------------------------------------------------------
--- Este arquivo cria as tabelas e o conteúdo inicial do site.
--- Você NÃO precisa rodar este arquivo manualmente: o "instalar.php" já
--- executa tudo daqui. Mas, se preferir, pode importá-lo pelo phpMyAdmin.
---
--- Tudo aqui é seguro de rodar mais de uma vez:
---   - CREATE TABLE IF NOT EXISTS  -> não recria tabelas existentes
---   - INSERT IGNORE               -> não duplica o conteúdo inicial
--- =====================================================================
-
--- Usuários do painel administrativo
 CREATE TABLE IF NOT EXISTS usuario (
     id         BIGINT       AUTO_INCREMENT PRIMARY KEY,
     nome       VARCHAR(150) NOT NULL,
     email      VARCHAR(180) NOT NULL UNIQUE,
-    senha      VARCHAR(100) NOT NULL,             -- hash BCrypt (nunca a senha pura)
+    senha      VARCHAR(100) NOT NULL,            
     role       VARCHAR(30)  NOT NULL DEFAULT 'ADMIN',
-    enabled    TINYINT(1)   NOT NULL DEFAULT 1,   -- 1 = ativo, 0 = desativado
+    enabled    TINYINT(1)   NOT NULL DEFAULT 1,   
     criado_em  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Solicitações (Protocolo Digital)
 CREATE TABLE IF NOT EXISTS protocolo (
     id               BIGINT       AUTO_INCREMENT PRIMARY KEY,
     numero           VARCHAR(40)  NOT NULL UNIQUE,
@@ -38,7 +24,6 @@ CREATE TABLE IF NOT EXISTS protocolo (
     INDEX idx_protocolo_criado_em (criado_em)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Anexos vinculados a um protocolo
 CREATE TABLE IF NOT EXISTS anexo (
     id            BIGINT       AUTO_INCREMENT PRIMARY KEY,
     protocolo_id  BIGINT       NOT NULL,
@@ -51,7 +36,6 @@ CREATE TABLE IF NOT EXISTS anexo (
     FOREIGN KEY (protocolo_id) REFERENCES protocolo (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Projetos exibidos na landing page
 CREATE TABLE IF NOT EXISTS projeto (
     id            BIGINT       AUTO_INCREMENT PRIMARY KEY,
     titulo        VARCHAR(150) NOT NULL,
@@ -63,7 +47,6 @@ CREATE TABLE IF NOT EXISTS projeto (
     atualizado_em TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Conteúdo editável do site (registro único, sempre id = 1)
 CREATE TABLE IF NOT EXISTS conteudo_site (
     id               BIGINT PRIMARY KEY,
     hero_title       VARCHAR(255),
@@ -89,7 +72,6 @@ CREATE TABLE IF NOT EXISTS conteudo_site (
     atualizado_em    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Mensagens do "Fale Conosco"
 CREATE TABLE IF NOT EXISTS mensagem_contato (
     id        BIGINT       AUTO_INCREMENT PRIMARY KEY,
     nome      VARCHAR(150) NOT NULL,
@@ -100,7 +82,6 @@ CREATE TABLE IF NOT EXISTS mensagem_contato (
     criado_em TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Arquivos genéricos enviados pelo admin (logo, imagem hero, etc.)
 CREATE TABLE IF NOT EXISTS arquivo (
     id            BIGINT       AUTO_INCREMENT PRIMARY KEY,
     nome_original VARCHAR(255) NOT NULL,
@@ -110,16 +91,12 @@ CREATE TABLE IF NOT EXISTS arquivo (
     criado_em     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tentativas de login por IP (proteção contra força bruta)
 CREATE TABLE IF NOT EXISTS login_tentativa (
     ip            VARCHAR(45) PRIMARY KEY,
     tentativas    INT         NOT NULL DEFAULT 0,
     inicio_janela TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ---------------------------------------------------------------------
--- Conteúdo inicial do site (mesmos textos padrão do admin.html)
--- ---------------------------------------------------------------------
 INSERT IGNORE INTO conteudo_site (
     id, hero_title, hero_highlight, hero_desc, hero_btn, about_text,
     feat1_title, feat1_desc, feat2_title, feat2_desc,
