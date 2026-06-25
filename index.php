@@ -1,3 +1,6 @@
+<?php
+// Arquivo convertido para PHP. Mantenha este arquivo na pasta htdocs do XAMPP.
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,29 +13,25 @@
 </head>
 <body>
 
-<!-- SKIP LINK FOR ACCESSIBILITY (IHC) -->
 <a href="#conteudo-principal" class="skip-link">Ir para o conteúdo principal</a>
 
 <header class="header">
   <div class="nav">
-    <a href="#" class="logo" aria-label="Página inicial do IDTNPR">
+    <a href="index.php" class="logo" aria-label="Página inicial do IDTNPR">
       <img src="logo.png" alt="Logo IDTNPR" id="site-logo">
     </a>
 
-    <!-- RESPONSIVE NAV CONTAINER -->
     <div class="nav-container" id="nav-container">
       <nav aria-label="Menu principal">
         <a href="#sobre">Sobre</a>
-        <a href="quem-somos.html">Quem Somos</a>
+        <a href="quem-somos.php">Quem Somos</a>
         <a href="#contato">Fale conosco</a>
-        <a href="noticias.html">Notícias</a>
+        <a href="noticias.php">Notícias</a>
       </nav>
 
-      <a href="solucoes.html" class="btn-primary">Soluções</a>
+      <a href="solucoes.php" class="btn-primary">Soluções</a>
 
-      <!-- THEME TOGGLE SWITCH (IHC) -->
       <button class="theme-toggle-btn" id="theme-toggle" aria-label="Alternar tema claro/escuro" title="Alternar tema">
-        <!-- Sun Icon (shown in dark mode) -->
         <svg id="theme-icon-sun" class="sun" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -44,14 +43,12 @@
           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </svg>
-        <!-- Moon Icon (shown in light mode) -->
         <svg id="theme-icon-moon" class="moon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </button>
     </div>
 
-    <!-- MOBILE BURGER TOGGLE -->
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação" aria-expanded="false">
       <span></span>
       <span></span>
@@ -62,7 +59,6 @@
 
 <main id="conteudo-principal">
   
-  <!-- HERO SECTION -->
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-text reveal fade-left">
@@ -82,41 +78,31 @@
       <div class="hero-image-wrapper reveal fade-right">
         <div class="hero-scanner-container" id="hero-scanner" aria-label="Painel interativo com scanner inteligente da cidade">
           
-          <!-- This wrapper handles the background, grid, laser, and SVG so they are contained within rounded corners -->
           <div class="scanner-visual-wrapper">
-            <!-- Base background image -->
             <div class="scanner-bg-wrapper">
               <img src="cidade.jpg" alt="Mapa e imagem da cidade do Noroeste Paranaense - IDTNPR" id="hero-img-element">
             </div>
 
-            <!-- Glowing scanner sweep laser bar -->
             <div class="scanner-laser-bar" aria-hidden="true"></div>
 
-            <!-- Digital Grid map layer (visible on hover) -->
             <div class="scanner-grid-layer" aria-hidden="true"></div>
 
-            <!-- High-tech HUD Overlay (visible on hover) -->
             <div class="scanner-svg-overlay" aria-hidden="true">
               <svg viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width="1">
-                <!-- Grid circles -->
                 <circle cx="200" cy="150" r="110" stroke-dasharray="2,6" opacity="0.3"/>
                 <circle cx="200" cy="150" r="70" opacity="0.2"/>
-                <!-- Tech corner frames -->
                 <path d="M 15 25 L 35 25 L 35 45" opacity="0.7"/>
                 <path d="M 385 25 L 365 25 L 365 45" opacity="0.7"/>
                 <path d="M 15 275 L 35 275 L 35 255" opacity="0.7"/>
                 <path d="M 385 275 L 365 275 L 365 255" opacity="0.7"/>
-                <!-- Cyber network connections -->
                 <path d="M 100 100 L 150 100 L 170 120 L 230 120 L 250 100 L 300 100" opacity="0.4" stroke-dasharray="4,4"/>
                 <path d="M 80 200 L 150 200 L 200 150 M 200 150 L 320 200" opacity="0.4"/>
               </svg>
             </div>
           </div>
 
-          <!-- Interactive PULSING Hotspots -->
           <div class="scanner-hotspots">
             
-            <!-- Hotspot 1: Protocolo Digital -->
             <div class="city-hotspot" style="top: 30%; left: 35%;" role="button" aria-haspopup="true" aria-label="Informações sobre Protocolo Digital">
               <div class="hotspot-tooltip">
                 <h4>
@@ -127,7 +113,6 @@
               </div>
             </div>
 
-            <!-- Hotspot 2: Transparência e Dados -->
             <div class="city-hotspot" style="top: 55%; left: 60%;" role="button" aria-haspopup="true" aria-label="Informações sobre Inteligência de Dados">
               <div class="hotspot-tooltip">
                 <h4>
@@ -138,7 +123,6 @@
               </div>
             </div>
 
-            <!-- Hotspot 3: Ecossistema de Inovação -->
             <div class="city-hotspot" style="top: 75%; left: 25%;" role="button" aria-haspopup="true" aria-label="Informações sobre Ecossistema de Inovação">
               <div class="hotspot-tooltip">
                 <h4>
@@ -156,7 +140,6 @@
 
     </div>
 
-    <!-- BOUNCING MOUSE SCROLL DOWN INDICATOR (IHC) -->
     <div class="scroll-indicator" id="scroll-indicator" aria-hidden="true">
       <div class="mouse">
         <div class="wheel"></div>
@@ -164,7 +147,6 @@
     </div>
   </section>
 
-  <!-- ABOUT SECTION -->
   <section class="about" id="sobre">
     <div class="container">
       <div class="section-title reveal fade-bottom">
@@ -183,7 +165,6 @@
 
         <div class="features reveal fade-right">
           
-          <!-- FEATURE 1 -->
           <div class="feature">
             <div class="feature-icon-wrapper" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -197,7 +178,6 @@
             <p>Soluções digitais para modernizar serviços e processos públicos.</p>
           </div>
 
-          <!-- FEATURE 2 -->
           <div class="feature">
             <div class="feature-icon-wrapper" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -210,7 +190,6 @@
             <p>Inteligência de dados para decisões mais eficientes.</p>
           </div>
 
-          <!-- FEATURE 3 -->
           <div class="feature">
             <div class="feature-icon-wrapper" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -231,7 +210,6 @@
             <p>Metodologias que aumentam a eficiência dos órgãos públicos.</p>
           </div>
 
-          <!-- FEATURE 4 -->
           <div class="feature">
             <div class="feature-icon-wrapper" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -248,7 +226,6 @@
     </div>
   </section>
 
-  <!-- PROJECTS SECTION -->
   <section class="projects" id="projetos">
     <div class="container">
       <div class="section-title reveal fade-bottom">
@@ -284,27 +261,8 @@
     </div>
   </section>
 
-  <!-- CTA SECTION
-  <section class="cta" id="solucoes">
-    <div class="container cta-grid">
-      <div class="reveal fade-left">
-        <h2>Parcerias que transformam cidades.</h2>
-      </div>
-      <div class="reveal fade-bottom">
-        <p>
-          Trabalhamos junto a órgãos públicos, instituições e especialistas
-          para transformar realidades e gerar impacto positivo.
-        </p>
-      </div>
-      <div class="reveal fade-right">
-        <a href="#contato" class="btn-outline">Quero Ser Parceiro <span>→</span></a>
-      </div>
-    </div>
-  </section> -->
-
 </main>
 
-<!-- FOOTER -->
 <footer class="footer" id="contato">
   <div class="container footer-grid">
     <div class="reveal fade-bottom">
@@ -320,14 +278,14 @@
     <div class="reveal fade-bottom" style="transition-delay: 100ms;">
       <h4>Navegação</h4>
       <a href="#sobre">Sobre o Instituto</a>
-      <a href="quem-somos.html">Quem Somos</a>
-      <a href="solucoes.html">Soluções</a>
-      <a href="noticias.html">Notícias</a>
+      <a href="quem-somos.php">Quem Somos</a>
+      <a href="solucoes.php">Soluções</a>
+      <a href="noticias.php">Notícias</a>
     </div>
 
     <div class="reveal fade-bottom" style="transition-delay: 200ms;">
       <h4>Institucional</h4>
-      <a href="quem-somos.html">Equipe</a>
+      <a href="quem-somos.php">Equipe</a>
       <a href="#">Governança</a>
       <a href="#">Transparência</a>
       <a href="#">Trabalhe conosco</a>
@@ -349,7 +307,6 @@
   </div>
 </footer>
 
-<!-- FLOATING BACK TO TOP BUTTON (IHC) -->
 <button id="back-to-top" aria-label="Voltar para o topo da página" title="Voltar ao Topo">
   <svg viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
     <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -359,9 +316,6 @@
 
 <script>
 (function() {
-  /* ==========================================================================
-     1. LOCALSTORAGE SYNCHRONIZATION WITH ADMIN PANEL
-     ========================================================================== */
   const data = JSON.parse(localStorage.getItem('idtnpr_site_data') || 'null');
   if (data) {
     const t = data.textos || {};
@@ -396,7 +350,6 @@
     const ctaBtn = document.querySelector('.cta .btn-outline');
     if (ctaBtn && t.ctaBtn) ctaBtn.textContent = t.ctaBtn;
 
-    // Projetos
     const projetos = data.projetos;
     if (projetos && projetos.length > 0) {
       const grid = document.querySelector('#main-project-grid');
@@ -414,7 +367,6 @@
       }
     }
 
-    // Contato
     const contato = data.contato || {};
     if (contato.email) {
       const el = document.getElementById('footer-email');
@@ -425,7 +377,6 @@
       if (el) el.textContent = contato.phone;
     }
 
-    // Imagens
     const imgs = data.imagens || {};
     if (imgs.logo) {
       document.querySelectorAll('#site-logo, .footer-logo img').forEach(el => el.src = imgs.logo);
@@ -436,9 +387,6 @@
     }
   }
 
-  /* ==========================================================================
-     2. THEME SWITCHER CONTROLLER (IHC)
-     ========================================================================== */
   const themeToggle = document.getElementById('theme-toggle');
   const sunIcon = document.getElementById('theme-icon-sun');
   const moonIcon = document.getElementById('theme-icon-moon');
@@ -471,9 +419,6 @@
     setTheme(newTheme);
   });
 
-  /* ==========================================================================
-     3. INTERACTIVE RESPONSIVE MOBILE NAVIGATION
-     ========================================================================== */
   const menuToggle = document.getElementById('menu-toggle');
   const navContainer = document.getElementById('nav-container');
   const navLinks = navContainer.querySelectorAll('nav a, .btn-primary');
@@ -494,9 +439,6 @@
     });
   });
 
-  /* ==========================================================================
-     4. HEADER SCROLL FX & SCROLL TO TOP
-     ========================================================================== */
   const header = document.querySelector('.header');
   const backToTopBtn = document.getElementById('back-to-top');
 
@@ -521,9 +463,6 @@
     });
   });
 
-  /* ==========================================================================
-     5. HERO MOUSE INDICATOR SCROLL
-     ========================================================================== */
   const scrollIndicator = document.getElementById('scroll-indicator');
   if (scrollIndicator) {
     scrollIndicator.addEventListener('click', () => {
@@ -534,9 +473,6 @@
     });
   }
 
-  /* ==========================================================================
-     6. INTERSECTION OBSERVER - SCROLL REVEAL (IHC)
-     ========================================================================== */
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!prefersReducedMotion) {
