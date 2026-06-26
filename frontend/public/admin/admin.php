@@ -1,198 +1,3 @@
-<?php
-$dataFile = __DIR__ . '/site-data.json';
-$uploadDir = __DIR__ . '/uploads';
-$uploadUrl = 'uploads';
-
-$defaultData = [
-    'textos' => [
-        'heroTitle' => 'Seu município pode fazer parte do',
-        'heroHighlight' => 'ecossistema de inovação',
-        'heroDesc' => 'Desenvolvemos soluções digitais para modernizar serviços públicos, promover transparência e aproximar cidadãos do governo através da tecnologia.',
-        'heroBtn' => 'Solicitar Reunião Técnica',
-        'aboutText' => 'Atuamos na transformação digital do setor público, combinando tecnologia, gestão e conhecimento para gerar resultados reais para a sociedade.',
-        'feat1Title' => 'Transformação Digital Pública',
-        'feat1Desc' => 'Soluções digitais para modernizar serviços e processos públicos.',
-        'feat2Title' => 'Dados e Transparência',
-        'feat2Desc' => 'Inteligência de dados para decisões mais eficientes.',
-        'feat3Title' => 'Inovação e Gestão',
-        'feat3Desc' => 'Metodologias que aumentam a eficiência dos órgãos públicos.',
-        'feat4Title' => 'Capacitação Técnica',
-        'feat4Desc' => 'Formação e transferência de conhecimento para equipes.',
-        'ctaTitle' => 'Parcerias que transformam cidades.',
-        'ctaDesc' => 'Trabalhamos junto a órgãos públicos, instituições e especialistas para transformar realidades e gerar impacto positivo.',
-        'ctaBtn' => 'QUERO SER PARCEIRO →',
-    ],
-    'projetos' => [
-        [
-            'titulo' => 'Protocolo Digital',
-            'descricao' => 'Plataforma para abertura, tramitação e acompanhamento de solicitações.',
-            'imagem' => 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=800&auto=format&fit=crop',
-            'link' => '#',
-        ],
-        [
-            'titulo' => 'Atendimento ao Cidadão',
-            'descricao' => 'Centralização de canais de atendimento com mais agilidade.',
-            'imagem' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop',
-            'link' => '#',
-        ],
-        [
-            'titulo' => 'Painel de Indicadores',
-            'descricao' => 'Dashboards inteligentes para acompanhamento da gestão.',
-            'imagem' => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop',
-            'link' => '#',
-        ],
-    ],
-    'contato' => [
-        'email' => 'contato@idtnpr.org.br',
-        'phone' => '(44) 99999-9999',
-    ],
-    'imagens' => [
-        'logo' => '',
-        'hero' => '',
-    ],
-];
-
-function deepMerge(array $default, array $custom): array
-{
-    foreach ($custom as $key => $value) {
-        if (
-            isset($default[$key])
-            && is_array($default[$key])
-            && is_array($value)
-            && !array_is_list($default[$key])
-        ) {
-            $default[$key] = deepMerge($default[$key], $value);
-        } else {
-            $default[$key] = $value;
-        }
-    }
-
-    return $default;
-}
-
-function jsonResponse(array $payload, int $statusCode = 200): void
-{
-    http_response_code($statusCode);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    exit;
-}
-
-function loadSiteData(string $dataFile, array $defaultData): array
-{
-    if (!file_exists($dataFile)) {
-        return $defaultData;
-    }
-
-    $content = file_get_contents($dataFile);
-
-    if ($content === false || trim($content) === '') {
-        return $defaultData;
-    }
-
-    $savedData = json_decode($content, true);
-
-    if (!is_array($savedData)) {
-        return $defaultData;
-    }
-
-    return deepMerge($defaultData, $savedData);
-}
-
-$action = $_GET['action'] ?? null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'save') {
-    $payload = json_decode(file_get_contents('php://input'), true);
-
-    if (!is_array($payload)) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'JSON inválido.',
-        ], 400);
-    }
-
-    $payload = deepMerge($defaultData, $payload);
-
-    $saved = file_put_contents(
-        $dataFile,
-        json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-        LOCK_EX
-    );
-
-    if ($saved === false) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'Não foi possível salvar o arquivo site-data.json. Verifique as permissões da pasta.',
-        ], 500);
-    }
-
-    jsonResponse([
-        'ok' => true,
-        'message' => 'Alterações publicadas com sucesso!',
-    ]);
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'upload') {
-    if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'Falha ao enviar imagem.',
-        ], 400);
-    }
-
-    if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'Imagem muito grande. Limite máximo: 5 MB.',
-        ], 400);
-    }
-
-    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'Não foi possível criar a pasta uploads.',
-        ], 500);
-    }
-
-    $tmpName = $_FILES['image']['tmp_name'];
-
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mime = $finfo->file($tmpName);
-
-    $allowed = [
-        'image/jpeg' => 'jpg',
-        'image/png' => 'png',
-        'image/webp' => 'webp',
-        'image/gif' => 'gif',
-        'image/svg+xml' => 'svg',
-    ];
-
-    if (!isset($allowed[$mime])) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'Formato inválido. Use JPG, PNG, WEBP, GIF ou SVG.',
-        ], 400);
-    }
-
-    $filename = date('YmdHis') . '-' . bin2hex(random_bytes(8)) . '.' . $allowed[$mime];
-    $destination = $uploadDir . '/' . $filename;
-
-    if (!move_uploaded_file($tmpName, $destination)) {
-        jsonResponse([
-            'ok' => false,
-            'message' => 'Não foi possível salvar a imagem enviada.',
-        ], 500);
-    }
-
-    jsonResponse([
-        'ok' => true,
-        'url' => $uploadUrl . '/' . $filename,
-        'filename' => $filename,
-    ]);
-}
-
-$siteData = loadSiteData($dataFile, $defaultData);
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -255,6 +60,7 @@ $siteData = loadSiteData($dataFile, $defaultData);
       </svg>
       Publicar Alterações
     </button>
+    <button class="btn-logout" id="btn-logout" type="button">Sair</button>
   </div>
 </aside>
 
@@ -408,7 +214,7 @@ $siteData = loadSiteData($dataFile, $defaultData);
 
       <div class="upload-zone" id="zone-logo">
         <img id="preview-logo" src="" alt="" style="display:none">
-        <p>Clique para enviar a logo PNG, SVG, JPG ou WEBP</p>
+        <p>Clique para enviar a logo PNG, JPG, WEBP ou GIF</p>
         <input type="file" id="input-logo" accept="image/*">
       </div>
     </div>
@@ -463,11 +269,7 @@ $siteData = loadSiteData($dataFile, $defaultData);
   <span id="toast-msg">Alterações publicadas!</span>
 </div>
 
-<script>
-  window.IDTNPR_ADMIN_DATA = <?php
-    echo json_encode($siteData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-  ?>;
-</script>
+<script src="../assets/js/api.js"></script>
 <script src="../assets/js/admin.js"></script>
 </body>
 </html>

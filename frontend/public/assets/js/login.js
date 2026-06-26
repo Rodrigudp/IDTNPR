@@ -97,7 +97,7 @@ function setupPasswordToggles() {
   });
 }
 
-function handleLogin() {
+async function handleLogin() {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
@@ -111,9 +111,28 @@ function handleLogin() {
     return;
   }
 
-  updateRememberedEmail(email);
-  sessionStorage.setItem(SESSION_KEY, 'true');
-  window.location.href = 'admin/admin.php';
+  loginButton.disabled = true;
+  showFeedback('Entrando...', '');
+
+  try {
+    const resposta = await API.post('/auth/login', {
+      corpo: { email: email, senha: password }
+    });
+
+    API.salvarToken(resposta.accessToken);
+    updateRememberedEmail(email);
+    sessionStorage.setItem(SESSION_KEY, 'true');
+    window.location.href = 'admin/admin.php';
+  } catch (erro) {
+    if (erro.status === 429) {
+      showFeedback('Muitas tentativas de login. Aguarde alguns minutos e tente novamente.', 'error');
+    } else if (erro.status === 401) {
+      showFeedback('E-mail ou senha incorretos.', 'error');
+    } else {
+      showFeedback(erro.message || 'Não foi possível entrar. Verifique se a API está no ar.', 'error');
+    }
+    loginButton.disabled = false;
+  }
 }
 
 function handleRegister() {

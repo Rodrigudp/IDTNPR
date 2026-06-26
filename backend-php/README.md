@@ -205,7 +205,12 @@ Para quem conhecia a versão antiga, este é o "de-para":
 
 ## Observação sobre o front-end
 
-As páginas `admin.html` e `protocolo.html` ainda **não** conversam com a API (o `admin.html`
-salva tudo no `localStorage` do navegador). Ligar o front-end a esta API é o próximo passo —
-veja a seção "Integração com o frontend" no `../backend/TAREFAS.md`. Esta API já está pronta
-para receber essas chamadas.
+O front-end (pasta `../frontend/public`) **já conversa com esta API**. As chamadas ficam
+centralizadas em `frontend/public/assets/js/api.js` (endereço da API e token de login):
+
+- `index.js` → `GET /api/conteudo`
+- `login.js` → `POST /api/auth/login`
+- `admin.js` → `GET/PUT /api/admin/conteudo`, `GET/POST/PUT/DELETE /api/admin/projetos`, `POST /api/admin/arquivos`
+- `protocolo.js` → `POST /api/protocolos` e `POST /api/protocolos/{numero}/anexos`
+
+Para rodar e testar tudo no seu computador, veja **`../COMO-TESTAR-LOCALHOST.md`**.
