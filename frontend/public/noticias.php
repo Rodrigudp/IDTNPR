@@ -1,0 +1,203 @@
+<?php
+// Arquivo convertido para PHP. Mantenha este arquivo na pasta htdocs do XAMPP.
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notícias - IDTNPR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/pages.css"/>
+</head>
+<body>
+<a href="#conteudo-principal" class="skip-link">Ir para o conteúdo principal</a>
+
+<header class="header">
+  <div class="nav">
+    <a href="index.php" class="logo" aria-label="Página inicial do IDTNPR">
+      <img src="assets/images/logo.png" alt="Logo IDTNPR" id="site-logo">
+    </a>
+    <div class="nav-container" id="nav-container">
+      <nav aria-label="Menu principal">
+        <a href="index.php#sobre">Sobre</a>
+        <a href="quem-somos.php">Quem Somos</a>
+        <a href="index.php#contato">Fale conosco</a>
+        <a href="noticias.php">Notícias</a>
+      </nav>
+      <a href="solucoes.php" class="btn-primary">Soluções</a>
+      <button class="theme-toggle-btn" id="theme-toggle" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+        <svg id="theme-icon-sun" class="sun" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="theme-icon-moon" class="moon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="breadcrumb-bar">
+  <div class="container">
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <a href="index.php">Início</a>
+      <span class="sep">/</span>
+      <span class="current">Notícias</span>
+    </nav>
+  </div>
+</div>
+
+<main id="conteudo-principal">
+  <section class="page-section page-hero">
+    <div class="container reveal fade-bottom">
+      <h1>Notícias</h1>
+      <p class="page-subtitle">Acompanhe as novidades e avanços do IDTNPR na transformação digital dos municípios</p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container reveal fade-bottom">
+
+      <div class="news-grid">
+        <article class="news-card" data-category="tecnologia">
+          <div class="news-card-img">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <div class="news-card-body">
+            <div class="news-card-meta">
+              <span class="news-card-tag">Tecnologia</span>
+              <span class="news-card-date">10 Jun 2026</span>
+            </div>
+            <h3>IDTNPR lança nova versão do sistema de Protocolo Digital</h3>
+            <p>Atualização traz interface redesenhada e novos recursos de acompanhamento em tempo real para cidadãos e servidores.</p>
+          </div>
+        </article>
+
+        <article class="news-card" data-category="capacitacao">
+          <div class="news-card-img">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <div class="news-card-body">
+            <div class="news-card-meta">
+              <span class="news-card-tag">Capacitação</span>
+              <span class="news-card-date">03 Jun 2026</span>
+            </div>
+            <h3>Capacitação em análise de dados reúne 80 servidores</h3>
+            <p>Workshop de três dias capacitou profissionais de 8 municípios em ferramentas de Business Intelligence e visualização de dados.</p>
+          </div>
+        </article>
+
+        <article class="news-card" data-category="municipios">
+          <div class="news-card-img">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <div class="news-card-body">
+            <div class="news-card-meta">
+              <span class="news-card-tag">Municípios</span>
+              <span class="news-card-date">28 Mai 2026</span>
+            </div>
+            <h3>Município de Cianorte adere ao programa de transformação digital</h3>
+            <p>Com a adesão, Cianorte se torna o 13º município a integrar o ecossistema de inovação do Noroeste Paranaense.</p>
+          </div>
+        </article>
+
+        <article class="news-card" data-category="institucional">
+          <div class="news-card-img">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <div class="news-card-body">
+            <div class="news-card-meta">
+              <span class="news-card-tag">Institucional</span>
+              <span class="news-card-date">20 Mai 2026</span>
+            </div>
+            <h3>IDTNPR firma parceria com universidades da região</h3>
+            <p>Convênio com UEM e UNIPAR visa desenvolver pesquisa aplicada e gerar oportunidades para estudantes de tecnologia.</p>
+          </div>
+        </article>
+
+        <article class="news-card" data-category="tecnologia">
+          <div class="news-card-img">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <div class="news-card-body">
+            <div class="news-card-meta">
+              <span class="news-card-tag">Tecnologia</span>
+              <span class="news-card-date">15 Mai 2026</span>
+            </div>
+            <h3>Dashboard de Transparência atinge marca de 1 milhão de consultas</h3>
+            <p>Ferramenta que disponibiliza dados públicos municipais em tempo real celebra marco de acessos desde seu lançamento.</p>
+          </div>
+        </article>
+
+        <article class="news-card" data-category="municipios">
+          <div class="news-card-img">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </div>
+          <div class="news-card-body">
+            <div class="news-card-meta">
+              <span class="news-card-tag">Municípios</span>
+              <span class="news-card-date">08 Mai 2026</span>
+            </div>
+            <h3>Umuarama reduz tempo de atendimento em 40% com soluções IDTNPR</h3>
+            <p>Implementação do Portal do Cidadão e Protocolo Digital transformou a experiência de atendimento ao público no município.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="reveal fade-bottom">
+      <div class="footer-logo"><img src="assets/images/logo.png" alt="IDTNPR"></div>
+      <p class="footer-desc">Conectamos pessoas, tecnologia e governo para construir soluções com impacto social.</p>
+    </div>
+    <div class="reveal fade-bottom" style="transition-delay: 100ms;">
+      <h4>Navegação</h4>
+      <a href="index.php#sobre">Sobre o Instituto</a>
+      <a href="quem-somos.php">Quem Somos</a>
+      <a href="solucoes.php">Soluções</a>
+      <a href="noticias.php">Notícias</a>
+      <a href="index.php#contato">Contato</a>
+    </div>
+    <div class="reveal fade-bottom" style="transition-delay: 200ms;">
+      <h4>Institucional</h4>
+      <a href="quem-somos.php">Equipe</a>
+      <a href="#">Governança</a>
+      <a href="#">Transparência</a>
+      <a href="#">Trabalhe conosco</a>
+    </div>
+    <div class="reveal fade-bottom" style="transition-delay: 300ms;">
+      <h4>Contato</h4>
+      <p class="contact-info">contato@idtnpr.org.br</p>
+      <p class="contact-info">(44) 99999-9999</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 IDTNPR. Todos os direitos reservados. Projetado com foco em IHC.</p>
+  </div>
+</footer>
+
+<button id="back-to-top" aria-label="Voltar ao topo">↑</button>
+
+<script src="assets/js/noticias.js"></script>
+</body>
+</html>
