@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="pages.css"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/pages.css"/>
 </head>
 <body>
 
@@ -20,7 +20,11 @@
 <header class="header">
   <div class="nav">
     <a href="index.php" class="logo" aria-label="Página inicial do IDTNPR">
+<<<<<<<< HEAD:frontend/public/protocolo.php
+      <img src="assets/images/logo.png" alt="Logo IDTNPR" id="site-logo">
+========
       <img src="logo.png" alt="Logo IDTNPR" id="site-logo">
+>>>>>>>> origin/main:protocolo.php
     </a>
     <div class="nav-container" id="nav-container">
       <nav aria-label="Menu principal">
@@ -154,7 +158,7 @@
 <footer class="footer">
   <div class="container footer-grid">
     <div class="reveal fade-bottom">
-      <div class="footer-logo"><img src="logo.png" alt="IDTNPR"></div>
+      <div class="footer-logo"><img src="assets/images/logo.png" alt="IDTNPR"></div>
       <p class="footer-desc">Conectamos pessoas, tecnologia e governo para construir soluções com impacto social.</p>
     </div>
     <div class="reveal fade-bottom" style="transition-delay: 100ms;">
@@ -185,6 +189,9 @@
 
 <button id="back-to-top" aria-label="Voltar ao topo">↑</button>
 
+<<<<<<<< HEAD:frontend/public/protocolo.php
+<script src="assets/js/protocolo.js"></script>
+========
 <script>
 (function() {
   const themeToggle = document.getElementById('theme-toggle');
@@ -261,6 +268,7 @@
   }
 })();
 </script>
+>>>>>>>> origin/main:protocolo.php
 
 </body>
 </html>

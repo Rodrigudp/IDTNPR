@@ -9,7 +9,7 @@
   <title>IDTNPR - Instituto de Desenvolvimento de Tecnologias do Noroeste Paranaense</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
 </head>
 <body>
 
@@ -18,7 +18,11 @@
 <header class="header">
   <div class="nav">
     <a href="index.php" class="logo" aria-label="Página inicial do IDTNPR">
+<<<<<<<< HEAD:frontend/public/index.php
+      <img src="assets/images/logo.png" alt="Logo IDTNPR" id="site-logo">
+========
       <img src="logo.png" alt="Logo IDTNPR" id="site-logo">
+>>>>>>>> origin/main:index.php
     </a>
 
     <div class="nav-container" id="nav-container">
@@ -80,7 +84,7 @@
           
           <div class="scanner-visual-wrapper">
             <div class="scanner-bg-wrapper">
-              <img src="cidade.jpg" alt="Mapa e imagem da cidade do Noroeste Paranaense - IDTNPR" id="hero-img-element">
+              <img src="assets/images/cidade.jpg" alt="Mapa e imagem da cidade do Noroeste Paranaense - IDTNPR" id="hero-img-element">
             </div>
 
             <div class="scanner-laser-bar" aria-hidden="true"></div>
@@ -267,7 +271,7 @@
   <div class="container footer-grid">
     <div class="reveal fade-bottom">
       <div class="footer-logo">
-        <img src="logo.png" alt="IDTNPR">
+        <img src="assets/images/logo.png" alt="IDTNPR">
       </div>
       <p class="footer-desc">
         Conectamos pessoas, tecnologia e governo para construir soluções
@@ -314,6 +318,9 @@
   </svg>
 </button>
 
+<<<<<<<< HEAD:frontend/public/index.php
+<script src="assets/js/index.js"></script>
+========
 <script>
 (function() {
   const data = JSON.parse(localStorage.getItem('idtnpr_site_data') || 'null');
@@ -498,6 +505,7 @@
 
 })();
 </script>
+>>>>>>>> origin/main:index.php
 
 </body>
 </html>

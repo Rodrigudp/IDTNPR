@@ -1,128 +1,4 @@
-<?php
-$tituloPagina = "Login - IDTNPR";
-?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $tituloPagina ?></title>
-
-</head>
-
-<body>
-
-  <header class="header">
-    <div class="nav">
-      <a href="index.php" class="logo">
-        <img src="logo.png" alt="Logo IDTNPR">
-      </a>
-        <button class="theme-toggle-btn" id="theme-toggle" type="button" aria-label="Alternar tema">
-          <svg id="theme-icon-sun" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-
-          <svg id="theme-icon-moon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="login-page">
-    <section class="login-box">
-      <div class="login-logo">
-        <img src="logo.png" alt="Logo IDTNPR">
-      </div>
-
-      <h1>Entrar</h1>
-      <p>Acesse sua conta para continuar.</p>
-
-      <form class="login-form" action="#" method="POST">
-        <div class="input-group">
-          <label for="email">E-mail</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            placeholder="Digite seu e-mail"
-          >
-        </div>
-
-        <div class="input-group">
-          <label for="senha">Senha</label>
-          <input 
-            type="password" 
-            id="senha" 
-            name="senha" 
-            placeholder="Digite sua senha"
-          >
-        </div>
-
-        <div class="login-options">
-          <label>
-            <input type="checkbox" name="lembrar">
-            Lembrar-me
-          </label>
-
-          <a href="#">Esqueci minha senha</a>
-        </div>
-
-        <button type="button" class="btn-primary login-btn">
-          Entrar
-        </button>
-      </form>
-    </section>
-  </main>
-
-  <script>
-    const themeToggle = document.getElementById('theme-toggle');
-    const sunIcon = document.getElementById('theme-icon-sun');
-    const moonIcon = document.getElementById('theme-icon-moon');
-
-    function setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-
-      if (theme === 'dark') {
-        sunIcon.style.display = 'block';
-        moonIcon.style.display = 'none';
-      } else {
-        sunIcon.style.display = 'none';
-        moonIcon.style.display = 'block';
-      }
-    }
-
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-
-    themeToggle.addEventListener('click', function () {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-      setTheme(nextTheme);
-    });
-
-    const menuToggle = document.getElementById('menu-toggle');
-    const navContainer = document.getElementById('nav-container');
-
-    menuToggle.addEventListener('click', function () {
-      navContainer.classList.toggle('active');
-      menuToggle.classList.toggle('active');
-    });
-  </script>
-
-<style>
-    :root {
+:root {
       --primary: #2563eb;
       --secondary: #10b981;
       --bg: #f8fafc;
@@ -324,10 +200,43 @@ $tituloPagina = "Login - IDTNPR";
       line-height: 1.5;
     }
 
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+    }
+
+    .auth-tab {
+      min-height: 40px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .auth-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 12px 22px rgba(37, 99, 235, 0.18);
+    }
+
     .login-form {
       display: grid;
       gap: 18px;
       text-align: left;
+    }
+
+    .auth-form[hidden] {
+      display: none;
     }
 
     .input-group {
@@ -366,6 +275,60 @@ $tituloPagina = "Login - IDTNPR";
       color: #94a3b8;
     }
 
+    .password-field {
+      position: relative;
+    }
+
+    .password-field input {
+      padding-right: 54px;
+    }
+
+    .password-toggle {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .password-toggle:hover,
+    .password-toggle:focus-visible {
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.1);
+      outline: none;
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .password-toggle .icon-eye-off {
+      display: none;
+    }
+
+    .password-toggle.is-visible .icon-eye {
+      display: none;
+    }
+
+    .password-toggle.is-visible .icon-eye-off {
+      display: block;
+    }
+
     .login-options {
       display: flex;
       align-items: center;
@@ -400,6 +363,28 @@ $tituloPagina = "Login - IDTNPR";
       width: 100%;
       margin-top: 6px;
       font-size: 1rem;
+    }
+
+    .register-btn {
+      width: 100%;
+      margin-top: 6px;
+      font-size: 1rem;
+    }
+
+    .auth-feedback {
+      min-height: 22px;
+      margin: 18px 0 0;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .auth-feedback.error {
+      color: #dc2626;
+    }
+
+    .auth-feedback.success {
+      color: var(--secondary);
     }
 
     @media (max-width: 760px) {
@@ -453,7 +438,3 @@ $tituloPagina = "Login - IDTNPR";
         flex-direction: column;
       }
     }
-  </style>
-
-</body>
-</html>
