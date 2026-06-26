@@ -1,5 +1,4 @@
 (function() {
-  // Theme toggle
   function getPreferredTheme() {
     const stored = localStorage.getItem('theme');
     if (stored) return stored;
@@ -28,7 +27,6 @@
     setTheme(current === 'dark' ? 'light' : 'dark');
   });
 
-  // Mobile menu toggle
   const menuToggle = document.getElementById('menu-toggle');
   const navContainer = document.getElementById('nav-container');
 
@@ -39,7 +37,6 @@
     this.classList.toggle('active');
   });
 
-  // Header scroll effect + back to top
   const header = document.querySelector('.header');
   const backToTop = document.getElementById('back-to-top');
 
@@ -61,7 +58,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Scroll reveal with IntersectionObserver
   const reveals = document.querySelectorAll('.reveal');
 
   const observer = new IntersectionObserver(function(entries) {

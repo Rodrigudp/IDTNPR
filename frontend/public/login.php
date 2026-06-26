@@ -179,6 +179,7 @@ $tituloPagina = "Login - IDTNPR";
       <p class="auth-feedback" id="auth-feedback" role="status" aria-live="polite"></p>
     </section>
   </main>
+  <script src="assets/js/api.js"></script>
   <script src="assets/js/login.js"></script>
 
 </body>

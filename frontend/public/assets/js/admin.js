@@ -1,7 +1,30 @@
 (function() {
-  var ENDPOINT = window.location.pathname;
+  if (!API.estaLogado()) {
+    window.location.href = '../login.php';
+    return;
+  }
 
-  var siteData = window.IDTNPR_ADMIN_DATA || {};
+  var conteudo = {};
+  var projetos = [];
+
+  var CAMPOS_TEXTO = {
+    'hero-title': 'heroTitle',
+    'hero-highlight': 'heroHighlight',
+    'hero-desc': 'heroDesc',
+    'hero-btn': 'heroBtn',
+    'about-text': 'aboutText',
+    'feat1-title': 'feat1Title',
+    'feat1-desc': 'feat1Desc',
+    'feat2-title': 'feat2Title',
+    'feat2-desc': 'feat2Desc',
+    'feat3-title': 'feat3Title',
+    'feat3-desc': 'feat3Desc',
+    'feat4-title': 'feat4Title',
+    'feat4-desc': 'feat4Desc',
+    'cta-title': 'ctaTitle',
+    'cta-desc': 'ctaDesc',
+    'cta-btn': 'ctaBtn'
+  };
 
   function escapeHtml(value) {
     return String(value || '')
@@ -12,22 +35,18 @@
       .replace(/'/g, '&#039;');
   }
 
-  async function saveData(data) {
-    var response = await fetch(ENDPOINT + '?action=save', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    var result = await response.json();
-
-    if (!response.ok || !result.ok) {
-      throw new Error(result.message || 'Erro ao salvar alterações.');
+  function tratarErro(error) {
+    if (error && error.status === 401) {
+      API.limparToken();
+      window.location.href = '../login.php';
+      return;
     }
+    showToast((error && error.message) || 'Ocorreu um erro.');
+  }
 
-    return result;
+  function logout() {
+    API.limparToken();
+    window.location.href = '../login.php';
   }
 
   var navItems = document.querySelectorAll('.nav-item');
@@ -50,71 +69,43 @@
   });
 
   function loadTextos() {
-    var t = siteData.textos;
-
-    document.getElementById('hero-title').value = t.heroTitle || '';
-    document.getElementById('hero-highlight').value = t.heroHighlight || '';
-    document.getElementById('hero-desc').value = t.heroDesc || '';
-    document.getElementById('hero-btn').value = t.heroBtn || '';
-    document.getElementById('about-text').value = t.aboutText || '';
-    document.getElementById('feat1-title').value = t.feat1Title || '';
-    document.getElementById('feat1-desc').value = t.feat1Desc || '';
-    document.getElementById('feat2-title').value = t.feat2Title || '';
-    document.getElementById('feat2-desc').value = t.feat2Desc || '';
-    document.getElementById('feat3-title').value = t.feat3Title || '';
-    document.getElementById('feat3-desc').value = t.feat3Desc || '';
-    document.getElementById('feat4-title').value = t.feat4Title || '';
-    document.getElementById('feat4-desc').value = t.feat4Desc || '';
-    document.getElementById('cta-title').value = t.ctaTitle || '';
-    document.getElementById('cta-desc').value = t.ctaDesc || '';
-    document.getElementById('cta-btn').value = t.ctaBtn || '';
+    Object.keys(CAMPOS_TEXTO).forEach(function(id) {
+      document.getElementById(id).value = conteudo[CAMPOS_TEXTO[id]] || '';
+    });
   }
 
   function collectTextos() {
-    siteData.textos.heroTitle = document.getElementById('hero-title').value;
-    siteData.textos.heroHighlight = document.getElementById('hero-highlight').value;
-    siteData.textos.heroDesc = document.getElementById('hero-desc').value;
-    siteData.textos.heroBtn = document.getElementById('hero-btn').value;
-    siteData.textos.aboutText = document.getElementById('about-text').value;
-    siteData.textos.feat1Title = document.getElementById('feat1-title').value;
-    siteData.textos.feat1Desc = document.getElementById('feat1-desc').value;
-    siteData.textos.feat2Title = document.getElementById('feat2-title').value;
-    siteData.textos.feat2Desc = document.getElementById('feat2-desc').value;
-    siteData.textos.feat3Title = document.getElementById('feat3-title').value;
-    siteData.textos.feat3Desc = document.getElementById('feat3-desc').value;
-    siteData.textos.feat4Title = document.getElementById('feat4-title').value;
-    siteData.textos.feat4Desc = document.getElementById('feat4-desc').value;
-    siteData.textos.ctaTitle = document.getElementById('cta-title').value;
-    siteData.textos.ctaDesc = document.getElementById('cta-desc').value;
-    siteData.textos.ctaBtn = document.getElementById('cta-btn').value;
+    Object.keys(CAMPOS_TEXTO).forEach(function(id) {
+      conteudo[CAMPOS_TEXTO[id]] = document.getElementById(id).value;
+    });
   }
 
   function loadContato() {
-    document.getElementById('contact-email').value = siteData.contato.email || '';
-    document.getElementById('contact-phone').value = siteData.contato.phone || '';
+    document.getElementById('contact-email').value = conteudo.contatoEmail || '';
+    document.getElementById('contact-phone').value = conteudo.contatoTelefone || '';
   }
 
   function collectContato() {
-    siteData.contato.email = document.getElementById('contact-email').value;
-    siteData.contato.phone = document.getElementById('contact-phone').value;
+    conteudo.contatoEmail = document.getElementById('contact-email').value;
+    conteudo.contatoTelefone = document.getElementById('contact-phone').value;
   }
 
   function renderProjetos() {
     var list = document.getElementById('project-list');
 
-    if (!siteData.projetos || siteData.projetos.length === 0) {
+    if (!projetos || projetos.length === 0) {
       list.innerHTML = '<p style="color:var(--gray-400);font-size:0.88rem;padding:20px;text-align:center;">Nenhum projeto cadastrado</p>';
       return;
     }
 
     var html = '';
 
-    for (var i = 0; i < siteData.projetos.length; i++) {
-      var p = siteData.projetos[i];
+    for (var i = 0; i < projetos.length; i++) {
+      var p = projetos[i];
 
       html += ''
         + '<div class="project-item">'
-        + '<img class="project-thumb" src="' + escapeHtml(p.imagem) + '" alt="' + escapeHtml(p.titulo) + '">'
+        + '<img class="project-thumb" src="' + escapeHtml(API.urlArquivo(p.imagemUrl)) + '" alt="' + escapeHtml(p.titulo) + '">'
         + '<div class="project-info">'
         + '<h4>' + escapeHtml(p.titulo) + '</h4>'
         + '<p>' + escapeHtml(p.descricao) + '</p>'
@@ -161,13 +152,13 @@
   }
 
   function editarProjeto(i) {
-    var p = siteData.projetos[i];
+    var p = projetos[i];
 
     document.getElementById('modal-title').textContent = 'Editar Projeto';
     document.getElementById('proj-edit-index').value = i;
     document.getElementById('proj-titulo').value = p.titulo || '';
     document.getElementById('proj-descricao').value = p.descricao || '';
-    document.getElementById('proj-imagem').value = p.imagem || '';
+    document.getElementById('proj-imagem').value = p.imagemUrl || '';
     document.getElementById('proj-link').value = p.link || '';
     document.getElementById('modal-projeto').classList.add('show');
   }
@@ -176,7 +167,7 @@
     document.getElementById('modal-projeto').classList.remove('show');
   }
 
-  function salvarProjeto() {
+  async function salvarProjeto() {
     var idx = parseInt(document.getElementById('proj-edit-index').value);
     var titulo = document.getElementById('proj-titulo').value.trim();
 
@@ -185,29 +176,40 @@
       return;
     }
 
-    var projeto = {
+    var corpo = {
       titulo: titulo,
       descricao: document.getElementById('proj-descricao').value,
-      imagem: document.getElementById('proj-imagem').value,
-      link: document.getElementById('proj-link').value || '#'
+      imagemUrl: document.getElementById('proj-imagem').value,
+      link: document.getElementById('proj-link').value || '#',
+      ordem: idx === -1 ? projetos.length : (projetos[idx].ordem || idx)
     };
 
-    if (idx === -1) {
-      siteData.projetos.push(projeto);
-    } else {
-      siteData.projetos[idx] = projeto;
-    }
+    try {
+      if (idx === -1) {
+        await API.post('/admin/projetos', { corpo: corpo, autenticado: true });
+      } else {
+        await API.put('/admin/projetos/' + projetos[idx].id, { corpo: corpo, autenticado: true });
+      }
 
-    fecharModal();
-    renderProjetos();
-    showToast('Projeto salvo. Clique em Publicar Alterações para gravar.');
+      fecharModal();
+      await recarregarProjetos();
+      showToast('Projeto salvo com sucesso!');
+    } catch (error) {
+      tratarErro(error);
+    }
   }
 
-  function removerProjeto(i) {
-    if (confirm('Remover este projeto?')) {
-      siteData.projetos.splice(i, 1);
-      renderProjetos();
-      showToast('Projeto removido. Clique em Publicar Alterações para gravar.');
+  async function removerProjeto(i) {
+    if (!confirm('Remover este projeto?')) {
+      return;
+    }
+
+    try {
+      await API.del('/admin/projetos/' + projetos[i].id, { autenticado: true });
+      await recarregarProjetos();
+      showToast('Projeto removido.');
+    } catch (error) {
+      tratarErro(error);
     }
   }
 
@@ -220,26 +222,16 @@
 
     try {
       var formData = new FormData();
-      formData.append('image', file);
-      formData.append('type', type);
+      formData.append('arquivo', file);
 
-      var response = await fetch(ENDPOINT + '?action=upload', {
-        method: 'POST',
-        body: formData
-      });
+      var result = await API.post('/admin/arquivos', { formData: formData, autenticado: true });
 
-      var result = await response.json();
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || 'Erro ao enviar imagem.');
-      }
-
-      siteData.imagens[type] = result.url;
+      conteudo[type === 'logo' ? 'logoUrl' : 'heroImgUrl'] = result.url;
 
       var preview = document.getElementById('preview-' + type);
       var zone = document.getElementById('zone-' + type);
 
-      preview.src = result.url;
+      preview.src = API.urlArquivo(result.url);
       preview.style.display = 'block';
 
       zone.classList.add('has-image');
@@ -247,22 +239,27 @@
 
       showToast('Imagem carregada. Clique em Publicar Alterações para gravar.');
     } catch (error) {
-      showToast(error.message);
+      tratarErro(error);
     }
   }
 
   function loadImagens() {
-    ['logo', 'hero'].forEach(function(type) {
-      if (siteData.imagens && siteData.imagens[type]) {
-        var preview = document.getElementById('preview-' + type);
-        var zone = document.getElementById('zone-' + type);
+    var mapa = { logo: 'logoUrl', hero: 'heroImgUrl' };
 
-        preview.src = siteData.imagens[type];
-        preview.style.display = 'block';
-
-        zone.classList.add('has-image');
-        zone.querySelector('p').textContent = 'Imagem carregada';
+    Object.keys(mapa).forEach(function(type) {
+      var url = conteudo[mapa[type]];
+      if (!url) {
+        return;
       }
+
+      var preview = document.getElementById('preview-' + type);
+      var zone = document.getElementById('zone-' + type);
+
+      preview.src = API.urlArquivo(url);
+      preview.style.display = 'block';
+
+      zone.classList.add('has-image');
+      zone.querySelector('p').textContent = 'Imagem carregada';
     });
   }
 
@@ -283,15 +280,40 @@
       collectTextos();
       collectContato();
 
-      await saveData(siteData);
+      await API.put('/admin/conteudo', { corpo: conteudo, autenticado: true });
 
       showToast('Alterações publicadas com sucesso!');
     } catch (error) {
-      showToast(error.message);
+      tratarErro(error);
+    }
+  }
+
+  async function recarregarProjetos() {
+    projetos = await API.get('/admin/projetos', { autenticado: true });
+    renderProjetos();
+  }
+
+  async function carregarTudo() {
+    try {
+      var resultados = await Promise.all([
+        API.get('/admin/conteudo', { autenticado: true }),
+        API.get('/admin/projetos', { autenticado: true })
+      ]);
+
+      conteudo = resultados[0] || {};
+      projetos = resultados[1] || [];
+
+      loadTextos();
+      loadContato();
+      loadImagens();
+      renderProjetos();
+    } catch (error) {
+      tratarErro(error);
     }
   }
 
   document.getElementById('btn-publicar').addEventListener('click', publicar);
+  document.getElementById('btn-logout').addEventListener('click', logout);
   document.getElementById('btn-novo-projeto').addEventListener('click', abrirModal);
   document.getElementById('btn-cancelar').addEventListener('click', fecharModal);
   document.getElementById('btn-salvar-projeto').addEventListener('click', salvarProjeto);
@@ -320,8 +342,5 @@
     handleUpload(this, 'hero');
   });
 
-  loadTextos();
-  loadContato();
-  renderProjetos();
-  loadImagens();
+  carregarTudo();
 })();

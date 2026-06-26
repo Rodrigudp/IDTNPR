@@ -1,7 +1,7 @@
 (function() {
-  const data = JSON.parse(localStorage.getItem('idtnpr_site_data') || 'null');
-  if (data) {
-    const t = data.textos || {};
+  function aplicarConteudo(t, projetos) {
+    t = t || {};
+
     const heroTitle = document.querySelector('.hero-text h2');
     if (heroTitle && t.heroTitle) {
       heroTitle.innerHTML = t.heroTitle + ' <span>' + (t.heroHighlight || '') + '</span>';
@@ -33,42 +33,43 @@
     const ctaBtn = document.querySelector('.cta .btn-outline');
     if (ctaBtn && t.ctaBtn) ctaBtn.textContent = t.ctaBtn;
 
-    const projetos = data.projetos;
     if (projetos && projetos.length > 0) {
       const grid = document.querySelector('#main-project-grid');
       if (grid) {
         grid.innerHTML = projetos.map(p => `
           <div class="project-card reveal fade-bottom">
             <div class="project-img-wrapper">
-              <img src="${p.imagem}" alt="${p.titulo}" loading="lazy">
+              <img src="${API.urlArquivo(p.imagemUrl)}" alt="${p.titulo || ''}" loading="lazy">
             </div>
-            <h3>${p.titulo}</h3>
-            <p>${p.descricao}</p>
-            <a href="${p.link}">Saiba mais <span>→</span></a>
+            <h3>${p.titulo || ''}</h3>
+            <p>${p.descricao || ''}</p>
+            <a href="${p.link || '#'}">Saiba mais <span>→</span></a>
           </div>
         `).join('');
       }
     }
 
-    const contato = data.contato || {};
-    if (contato.email) {
+    if (t.contatoEmail) {
       const el = document.getElementById('footer-email');
-      if (el) el.textContent = contato.email;
+      if (el) el.textContent = t.contatoEmail;
     }
-    if (contato.phone) {
+    if (t.contatoTelefone) {
       const el = document.getElementById('footer-phone');
-      if (el) el.textContent = contato.phone;
+      if (el) el.textContent = t.contatoTelefone;
     }
 
-    const imgs = data.imagens || {};
-    if (imgs.logo) {
-      document.querySelectorAll('#site-logo, .footer-logo img').forEach(el => el.src = imgs.logo);
+    if (t.logoUrl) {
+      document.querySelectorAll('#site-logo, .footer-logo img').forEach(el => el.src = API.urlArquivo(t.logoUrl));
     }
-    if (imgs.hero) {
+    if (t.heroImgUrl) {
       const heroImg = document.getElementById('hero-img-element');
-      if (heroImg) heroImg.src = imgs.hero;
+      if (heroImg) heroImg.src = API.urlArquivo(t.heroImgUrl);
     }
   }
+
+  API.get('/conteudo')
+    .then(resposta => aplicarConteudo(resposta.conteudo, resposta.projetos))
+    .catch(erro => console.warn('Nao foi possivel carregar o conteudo da API:', erro.message));
 
   const themeToggle = document.getElementById('theme-toggle');
   const sunIcon = document.getElementById('theme-icon-sun');

@@ -111,10 +111,12 @@
                 <label for="proto-tipo">Tipo de solicitação</label>
                 <select id="proto-tipo">
                   <option value="" disabled selected>Selecione uma opção</option>
-                  <option value="reclamacao">Reclamação</option>
-                  <option value="solicitacao">Solicitação de Serviço</option>
-                  <option value="informacao">Pedido de Informação</option>
-                  <option value="sugestao">Sugestão</option>
+                  <option value="INFORMACAO">Pedido de Informação</option>
+                  <option value="SOLICITACAO_SERVICO">Solicitação de Serviço</option>
+                  <option value="RECLAMACAO">Reclamação</option>
+                  <option value="DENUNCIA">Denúncia</option>
+                  <option value="ELOGIO">Elogio</option>
+                  <option value="OUTRO">Outro</option>
                 </select>
               </div>
             </div>
@@ -142,7 +144,9 @@
               </div>
             </div>
 
-            <button class="proto-btn-submit">Enviar solicitação</button>
+            <button class="proto-btn-submit" id="proto-submit" type="button">Enviar solicitação</button>
+
+            <div id="proto-feedback" class="proto-feedback" role="status" aria-live="polite"></div>
           </div>
         </div>
       </div>
@@ -185,6 +189,7 @@
 
 <button id="back-to-top" aria-label="Voltar ao topo">↑</button>
 
+<script src="assets/js/api.js"></script>
 <script src="assets/js/protocolo.js"></script>
 
 </body>
