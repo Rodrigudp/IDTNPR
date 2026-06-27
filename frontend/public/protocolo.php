@@ -80,6 +80,65 @@
     <div class="container">
       <div class="proto-layout">
 
+        <div class="proto-track-col reveal fade-center">
+          <div class="proto-form-card">
+            <h2>Acompanhar solicitação</h2>
+            <p class="proto-track-hint">Digite o número do protocolo recebido por e-mail para consultar o status da sua solicitação.</p>
+
+            <div class="proto-form-row single">
+              <div class="proto-form-group">
+                <label for="track-numero">Número do protocolo</label>
+                <input type="text" id="track-numero" placeholder="Ex.: 2026-A1B2C3D4E5F6..." />
+              </div>
+            </div>
+
+            <button class="proto-btn-submit" id="track-submit" type="button">Consultar</button>
+
+            <div id="track-feedback" class="proto-feedback" role="status" aria-live="polite"></div>
+
+            <div id="track-result" class="proto-track-result" style="display:none;">
+              <div class="track-result-header">
+                <span class="track-numero-label">Protocolo</span>
+                <span id="track-result-numero" class="track-numero-value"></span>
+              </div>
+              <div class="track-result-body">
+                <div class="track-field">
+                  <span class="track-label">Nome</span>
+                  <span id="track-result-nome" class="track-value"></span>
+                </div>
+                <div class="track-field">
+                  <span class="track-label">CPF</span>
+                  <span id="track-result-cpf" class="track-value"></span>
+                </div>
+                <div class="track-field">
+                  <span class="track-label">Tipo</span>
+                  <span id="track-result-tipo" class="track-value"></span>
+                </div>
+                <div class="track-field">
+                  <span class="track-label">Status</span>
+                  <span id="track-result-status" class="track-value track-status-badge"></span>
+                </div>
+                <div class="track-field">
+                  <span class="track-label">Aberto em</span>
+                  <span id="track-result-data" class="track-value"></span>
+                </div>
+                <div class="track-field">
+                  <span class="track-label">Última atualização</span>
+                  <span id="track-result-atualizado" class="track-value"></span>
+                </div>
+                <div class="track-field track-field-full">
+                  <span class="track-label">Descrição</span>
+                  <span id="track-result-desc" class="track-value"></span>
+                </div>
+                <div id="track-anexos-section" class="track-field track-field-full" style="display:none;">
+                  <span class="track-label">Anexos</span>
+                  <ul id="track-result-anexos" class="track-anexos-list"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="proto-form-col reveal fade-center">
           <div class="proto-form-card">
             <h2>Abrir nova solicitação</h2>
@@ -149,7 +208,8 @@
             <div id="proto-feedback" class="proto-feedback" role="status" aria-live="polite"></div>
           </div>
         </div>
-      </div>
+
+      </div><!-- /proto-layout -->
     </div>
   </section>
 

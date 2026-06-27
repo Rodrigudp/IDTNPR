@@ -13,11 +13,11 @@
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     if (theme === 'dark') {
-      sunIcon.style.display = 'block';
-      moonIcon.style.display = 'none';
-    } else {
       sunIcon.style.display = 'none';
       moonIcon.style.display = 'block';
+    } else {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
     }
   }
 
@@ -145,3 +145,98 @@
 
   if (submitBtn) submitBtn.addEventListener('click', enviarSolicitacao);
 })();
+
+  // ---- Acompanhamento de protocolo ----
+  const trackSubmit  = document.getElementById('track-submit');
+  const trackNumero  = document.getElementById('track-numero');
+  const trackFeedback = document.getElementById('track-feedback');
+  const trackResult  = document.getElementById('track-result');
+
+  const tiposLabel = {
+    INFORMACAO:        'Pedido de Informação',
+    SOLICITACAO_SERVICO: 'Solicitação de Serviço',
+    RECLAMACAO:        'Reclamação',
+    DENUNCIA:          'Denúncia',
+    ELOGIO:            'Elogio',
+    OUTRO:             'Outro'
+  };
+
+  function formatarData(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleString('pt-BR', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function mostrarTrackFeedback(msg, tipo) {
+    if (!trackFeedback) return;
+    trackFeedback.textContent = msg || '';
+    trackFeedback.classList.remove('error', 'success');
+    if (tipo) trackFeedback.classList.add(tipo);
+  }
+
+  function exibirResultado(p) {
+    document.getElementById('track-result-numero').textContent  = p.numero;
+    document.getElementById('track-result-nome').textContent    = p.nome;
+    document.getElementById('track-result-cpf').textContent     = p.cpf;
+    document.getElementById('track-result-tipo').textContent    = tiposLabel[p.tipoSolicitacao] || p.tipoSolicitacao;
+    document.getElementById('track-result-data').textContent    = formatarData(p.criadoEm);
+    document.getElementById('track-result-atualizado').textContent = formatarData(p.atualizadoEm);
+    document.getElementById('track-result-desc').textContent    = p.descricao;
+
+    const badge = document.getElementById('track-result-status');
+    badge.textContent = p.status.replace('_', ' ');
+    badge.className = 'track-value track-status-badge status-' + p.status;
+
+    const anexosSection = document.getElementById('track-anexos-section');
+    const anexosList    = document.getElementById('track-result-anexos');
+    if (p.anexos && p.anexos.length > 0) {
+      anexosList.innerHTML = '';
+      p.anexos.forEach(function(a) {
+        const li = document.createElement('li');
+        li.textContent = a.nomeOriginal + ' (' + (a.contentType || '?') + ')';
+        anexosList.appendChild(li);
+      });
+      anexosSection.style.display = '';
+    } else {
+      anexosSection.style.display = 'none';
+    }
+
+    trackResult.style.display = '';
+  }
+
+  async function consultarProtocolo() {
+    const numero = trackNumero ? trackNumero.value.trim() : '';
+    if (!numero) {
+      mostrarTrackFeedback('Digite o número do protocolo.', 'error');
+      return;
+    }
+
+    trackSubmit.disabled = true;
+    mostrarTrackFeedback('Consultando...', null);
+    trackResult.style.display = 'none';
+
+    try {
+      const protocolo = await API.get('/protocolos/' + encodeURIComponent(numero));
+      mostrarTrackFeedback('', null);
+      exibirResultado(protocolo);
+    } catch (erro) {
+      trackResult.style.display = 'none';
+      mostrarTrackFeedback(
+        erro.status === 404
+          ? 'Protocolo não encontrado. Verifique o número e tente novamente.'
+          : (erro.message || 'Não foi possível consultar. Tente novamente.'),
+        'error'
+      );
+    } finally {
+      trackSubmit.disabled = false;
+    }
+  }
+
+  if (trackSubmit) trackSubmit.addEventListener('click', consultarProtocolo);
+  if (trackNumero) {
+    trackNumero.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') consultarProtocolo();
+    });
+  }

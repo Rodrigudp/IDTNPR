@@ -1,7 +1,9 @@
 (function (global) {
   'use strict';
 
-  var API_ORIGIN = 'http://localhost:8080';
+  var API_ORIGIN = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:8080'
+    : window.location.origin;
   var API_BASE = API_ORIGIN + '/api';
   var TOKEN_KEY = 'idtnpr_admin_token';
 
