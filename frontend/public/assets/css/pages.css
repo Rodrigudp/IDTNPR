@@ -91,7 +91,6 @@
    -------------------------------------------------------------------------- */
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
 }
 
 .section-header .label {
@@ -127,7 +126,7 @@
    GENERIC SECTION SPACING
    -------------------------------------------------------------------------- */
 .page-section {
-  padding: 100px 0;
+  padding: 40px 0;
 }
 
 .page-section:nth-child(even) {

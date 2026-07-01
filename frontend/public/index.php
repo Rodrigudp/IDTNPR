@@ -161,6 +161,18 @@
             combinando tecnologia, gestão e conhecimento para gerar
             resultados reais para a sociedade.
           </p>
+
+          <h3 class="about-subtitle">Quem Somos</h3>
+          <p class="about-quem-somos">
+            Somos uma organização dedicada a aproximar tecnologia e gestão
+            pública, apoiando municípios na construção de serviços mais ágeis,
+            transparentes e acessíveis à população.
+          </p>
+          <p class="about-quem-somos">
+            Reunimos profissionais de diferentes áreas em torno de um propósito
+            comum: transformar a relação entre cidadão e poder público por meio
+            da inovação.
+          </p>
         </div>
 
         <div class="features reveal fade-right">

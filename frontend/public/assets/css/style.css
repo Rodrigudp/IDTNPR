@@ -356,7 +356,7 @@ nav a:hover::after {
   background: radial-gradient(circle at 80% 20%, var(--primary-glow) 0%, transparent 50%),
               radial-gradient(circle at 10% 90%, var(--accent-glow) 0%, transparent 40%),
               var(--bg-main);
-  padding: 140px 48px 100px;
+  padding: 72px 48px 80px;
   position: relative;
   overflow: hidden;
   transition: background-color 0.4s ease;
@@ -782,6 +782,23 @@ nav a:hover::after {
   line-height: 1.7;
   font-weight: 400;
   font-family: var(--font-title);
+}
+
+.about-subtitle {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.about-text p.about-quem-somos {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 400;
+  margin-bottom: 12px;
 }
 
 .features {
@@ -1226,7 +1243,7 @@ nav a:hover::after {
   }
   
   .hero {
-    padding: 100px 24px 80px;
+    padding: 56px 24px 64px;
   }
   
   .hero-grid {
