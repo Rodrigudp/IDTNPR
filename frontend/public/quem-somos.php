@@ -132,28 +132,30 @@
         <div class="mvv-card reveal fade-bottom">
           <div class="mvv-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="16"></line>
-              <line x1="8" y1="12" x2="16" y2="12"></line>
+              <circle cx="12" cy="12" r="7"></circle>
+              <line x1="12" y1="9.5" x2="12" y2="14.5"></line>
+              <line x1="9.5" y1="12" x2="14.5" y2="12"></line>
             </svg>
           </div>
           <h3>Missão</h3>
           <p>Promover a transformação digital da gestão pública municipal no Noroeste do Paraná, entregando soluções tecnológicas acessíveis, capacitando servidores e fortalecendo a cidadania digital.</p>
         </div>
+
         <div class="mvv-card reveal fade-bottom">
           <div class="mvv-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M4 12s3-5.5 8-5.5 8 5.5 8 5.5-3 5.5-8 5.5S4 12 4 12z"></path>
+              <circle cx="12" cy="12" r="2"></circle>
             </svg>
           </div>
           <h3>Visão</h3>
           <p>Ser referência nacional em inovação pública regional, tornando o Noroeste do Paraná um polo de excelência em governo digital, com municípios conectados, transparentes e centrados no cidadão.</p>
         </div>
+
         <div class="mvv-card reveal fade-bottom">
           <div class="mvv-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              <polygon points="12 5 14.16 9.38 19 10.09 15.5 13.5 16.33 18.31 12 16.04 7.67 18.31 8.5 13.5 5 10.09 9.84 9.38 12 5"></polygon>
             </svg>
           </div>
           <h3>Valores</h3>
