@@ -220,8 +220,8 @@
 }
 
 .qs-mvv-card .icon {
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   margin: 0 auto 20px;
   display: flex;
   align-items: center;
@@ -231,8 +231,8 @@
 }
 
 .qs-mvv-card .icon svg {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   stroke: var(--accent);
   fill: none;
   stroke-width: 2;
